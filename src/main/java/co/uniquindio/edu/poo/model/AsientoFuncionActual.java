@@ -5,6 +5,7 @@ public class AsientoFuncionActual {
     private Asiento asiento;
     private DetalleCompra detalleCompra;
     private BoletoBase boletoBase;
+    private EstadoAsiento estadoAsiento;
     private Funcion ownedByFuncion;
 
     /**
@@ -13,13 +14,15 @@ public class AsientoFuncionActual {
      * @param asiento asiento asociado
      * @param detalleCompra detalle de compra asociado
      * @param boletoBase boleto base asociado
+     * @param estadoAsiento estado actual del asiento en la funcion
      * @param ownedByFuncion funcion a la que pertenece
      */
-    public AsientoFuncionActual(String idAsientoFuncion, Asiento asiento, DetalleCompra detalleCompra, BoletoBase boletoBase, Funcion ownedByFuncion) {
+    public AsientoFuncionActual(String idAsientoFuncion, Asiento asiento, DetalleCompra detalleCompra, BoletoBase boletoBase, EstadoAsiento estadoAsiento, Funcion ownedByFuncion) {
         this.idAsientoFuncion = idAsientoFuncion;
         this.asiento = asiento;
         this.detalleCompra = detalleCompra;
         this.boletoBase = boletoBase;
+        this.estadoAsiento = estadoAsiento;
         this.ownedByFuncion = ownedByFuncion;
     }
 
@@ -55,6 +58,14 @@ public class AsientoFuncionActual {
         this.boletoBase = boletoBase;
     }
 
+    public EstadoAsiento getEstadoAsiento() {
+        return estadoAsiento;
+    }
+
+    public void setEstadoAsiento(EstadoAsiento estadoAsiento) {
+        this.estadoAsiento = estadoAsiento;
+    }
+
     public Funcion getOwnedByFuncion() {
         return ownedByFuncion;
     }
@@ -67,6 +78,7 @@ public class AsientoFuncionActual {
      * metodo que sirve para bloquear el asiento en la funcion actual
      */
     public void bloquearAsiento() {
+        this.estadoAsiento = EstadoAsiento.BLOQUEADO;
         System.out.println("Bloqueando asiento...");
     }
 
@@ -74,11 +86,20 @@ public class AsientoFuncionActual {
      * metodo que sirve para liberar el asiento en la funcion actual
      */
     public void liberarAsiento() {
+        this.estadoAsiento = EstadoAsiento.DISPONIBLE;
         System.out.println("Liberando asiento...");
+    }
+
+    /**
+     * metodo que sirve para verificar si el asiento se encuentra disponible en la funcion actual
+     * @return verdadero si esta disponible
+     */
+    public boolean verificarDisponibilidad() {
+        return this.estadoAsiento == EstadoAsiento.DISPONIBLE;
     }
 
     @Override
     public String toString() {
-        return "AsientoFuncionActual [idAsientoFuncion=" + idAsientoFuncion + "]";
+        return "AsientoFuncionActual [idAsientoFuncion=" + idAsientoFuncion + ", estadoAsiento=" + estadoAsiento + "]";
     }
 }

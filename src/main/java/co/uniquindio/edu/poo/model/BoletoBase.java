@@ -41,11 +41,19 @@ public class BoletoBase implements IBoleto {
         this.asientoFuncionActual = asientoFuncionActual;
     }
 
+    /**
+     * metodo que sirve para saber el costo del boleto
+     * @return el precioBase del Boleto
+     */
     @Override
     public double calcularCosto() {
         return precioBase;
     }
 
+    /**
+     * metodo que sirve para saber la descripcion del boleto
+     * @return la descripcion
+     */
     @Override
     public String obtenerDescripcion() {
         return descripcion;

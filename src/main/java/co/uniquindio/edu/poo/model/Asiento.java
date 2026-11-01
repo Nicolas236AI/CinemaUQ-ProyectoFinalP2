@@ -4,7 +4,6 @@ public class Asiento {
     private String idAsiento;
     private String fila;
     private int numero;
-    private EstadoAsiento estado;
     private Sala ownedBySala;
 
     /**
@@ -15,11 +14,10 @@ public class Asiento {
      * @param estado estado actual del asiento
      * @param ownedBySala sala a la que pertenece
      */
-    public Asiento(String idAsiento, String fila, int numero, EstadoAsiento estado, Sala ownedBySala) {
+    public Asiento(String idAsiento, String fila, int numero, Sala ownedBySala) {
         this.idAsiento = idAsiento;
         this.fila = fila;
         this.numero = numero;
-        this.estado = estado;
         this.ownedBySala = ownedBySala;
     }
 
@@ -47,14 +45,6 @@ public class Asiento {
         this.numero = numero;
     }
 
-    public EstadoAsiento getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoAsiento estado) {
-        this.estado = estado;
-    }
-
     public Sala getOwnedBySala() {
         return ownedBySala;
     }
@@ -63,16 +53,8 @@ public class Asiento {
         this.ownedBySala = ownedBySala;
     }
 
-    /**
-     * metodo que sirve para verificar la disponibilidad del asiento
-     * @return verdadero si esta disponible
-     */
-    public boolean verificarDisponibilidad() {
-        return this.estado == EstadoAsiento.DISPONIBLE;
-    }
-
     @Override
     public String toString() {
-        return "Asiento [idAsiento=" + idAsiento + ", fila=" + fila + ", numero=" + numero + ", estado=" + estado + "]";
+        return "Asiento [idAsiento=" + idAsiento + ", fila=" + fila + ", numero=" + numero  + "]";
     }
 }
