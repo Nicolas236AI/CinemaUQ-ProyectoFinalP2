@@ -1,5 +1,8 @@
 package co.uniquindio.edu.poo.model;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Compra {
     private String idCompra;
     private String fecha;
@@ -7,10 +10,10 @@ public class Compra {
     private EstadoCompra estado;
     private Cliente cliente;
     private ContextoDescuento contextoDescuento;
-    private DetalleCompra detalleCompra;
+    private List<DetalleCompra> listaDetalles;
 
     /**
-     * metodo constructor de la clase Compra para inicializar sus valores usando el patron Builder
+     * Metodo constructor de la clase compra Builder
      * @param builder constructor con los valores de la compra
      */
     private Compra(Builder builder) {
@@ -20,7 +23,7 @@ public class Compra {
         this.estado = builder.estado;
         this.cliente = builder.cliente;
         this.contextoDescuento = builder.contextoDescuento;
-        this.detalleCompra = builder.detalleCompra;
+        this.listaDetalles = builder.listaDetalles;
     }
 
     public String getIdCompra() {
@@ -71,22 +74,41 @@ public class Compra {
         this.contextoDescuento = contextoDescuento;
     }
 
-    public DetalleCompra getDetalleCompra() {
-        return detalleCompra;
+    public List<DetalleCompra> getListaDetalles() {
+        return listaDetalles;
     }
 
-    public void setDetalleCompra(DetalleCompra detalleCompra) {
-        this.detalleCompra = detalleCompra;
+    public void setListaDetalles(List<DetalleCompra> listaDetalles) {
+        this.listaDetalles = listaDetalles;
     }
 
     /**
-     * metodo que sirve para calcular el total de la compra sumando el detalle y aplicando el descuento si existe
+     * Valida que el cliente no compre más de 6 entradas en esta transacción
+     * recorriendo los detalles y sumando solo los que corresponden a boletos.
+     * @return true si la cantidad total de entradas es menor o igual a 6.
+     */
+    public boolean validarLimiteEntradas() {
+        int totalEntradas = 0;
+        if (listaDetalles != null){
+    for (DetalleCompra detalle : listaDetalles) {
+           if (detalle.getBoleto() != null) {
+                    totalEntradas += detalle.getCantidad();
+                }
+            }
+        }
+        return totalEntradas <= 6;
+    }
+
+    /**
+     *metodo que sirve para  calucular el Subtotal de la compra y aplicar el descuento si es el caso
      * @return total calculado de la compra
      */
     public double calcularTotal() {
         double suma = 0.0;
-        if (detalleCompra != null) {
-            suma = detalleCompra.calcularSubtotal();
+        if (listaDetalles != null) {
+            for (DetalleCompra detalle : listaDetalles) {
+                suma += detalle.calcularSubtotal();
+            }
         }
         if (contextoDescuento != null) {
             double descuento = contextoDescuento.aplicarEstrategia(suma);
@@ -97,10 +119,15 @@ public class Compra {
     }
 
     /**
-     * metodo que sirve para procesar el pago de la compra
-     * @return verdadero si el pago fue procesado con exito
+     * metodo que sirve para validar el proceso del pago validando el limite de entradas
+     * @return verdadero si el pago fue procesado con éxito
      */
     public boolean procesarPago() {
+        if (!validarLimiteEntradas()) {
+            this.estado = EstadoCompra.CANCELADA;
+            throw new IllegalStateException("No se pueden comprar más de 6 entradas para una misma función en una sola transacción.");
+        }
+
         if (cliente != null && cliente.getTarjeta() != null) {
             boolean exito = cliente.getTarjeta().debitarSaldo(total);
             if (exito) {
@@ -124,7 +151,7 @@ public class Compra {
         private EstadoCompra estado;
         private Cliente cliente;
         private ContextoDescuento contextoDescuento;
-        private DetalleCompra detalleCompra;
+        private List<DetalleCompra> listaDetalles = new ArrayList<>();
 
         public Builder idCompra(String idCompra) {
             this.idCompra = idCompra;
@@ -156,8 +183,13 @@ public class Compra {
             return this;
         }
 
-        public Builder detalleCompra(DetalleCompra detalleCompra) {
-            this.detalleCompra = detalleCompra;
+        public Builder listaDetalles(List<DetalleCompra> listaDetalles) {
+            this.listaDetalles = listaDetalles;
+            return this;
+        }
+
+        public Builder agregarDetalle(DetalleCompra detalle) {
+            this.listaDetalles.add(detalle);
             return this;
         }
 
