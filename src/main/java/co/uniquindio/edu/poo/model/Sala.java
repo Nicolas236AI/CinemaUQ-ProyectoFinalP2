@@ -3,7 +3,10 @@ package co.uniquindio.edu.poo.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Representa una sala de cine.
+ * Administra su capacidad y los asientos que contiene.
+ */
 public class Sala {
 
     private int idSala;
@@ -63,7 +66,10 @@ public class Sala {
     public void setOwnedByCinema(Cinema ownedByCinema) {
         this.ownedByCinema = ownedByCinema;
     }
-
+    /**
+     * Genera automáticamente los asientos de acuerdo con la capacidad
+     * de la sala, distribuyéndolos en filas de diez asientos.
+     */
     public void configurarAsientos() {
         if (capacidad <= 0) {
             return;
@@ -90,7 +96,13 @@ public class Sala {
             listaAsientos.add(asiento);
         }
     }
-
+    /**
+     * Convierte el índice numérico de una fila en su correspondiente
+     * identificación alfabética.
+     *
+     * @param numeroFila índice numérico de la fila.
+     * @return letra o combinación de letras correspondiente.
+     */
     private String obtenerNombreFila(int numeroFila) {
         StringBuilder fila = new StringBuilder();
 

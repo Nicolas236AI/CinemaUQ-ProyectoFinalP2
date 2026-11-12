@@ -1,6 +1,9 @@
 
 package co.uniquindio.edu.poo.model;
-
+/**
+ * Representa una película disponible en el cine.
+ * Almacena su identificación, título, duración y género.
+ */
 public class Pelicula {
 
     private String idPelicula;
@@ -50,6 +53,12 @@ public class Pelicula {
         this.genero = genero;
     }
 
+    /**
+     * Obtiene los detalles principales de la película,
+     * incluyendo su título, género y duración.
+     *
+     * @return información descriptiva de la película.
+     */
     public String obtenerDetalles() {
         return "Película: " + titulo
                 + "\nGénero: " + genero

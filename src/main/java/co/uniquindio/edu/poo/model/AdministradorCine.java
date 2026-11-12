@@ -1,6 +1,9 @@
 
 package co.uniquindio.edu.poo.model;
-
+/**
+ * Representa al administrador encargado de gestionar el cine.
+ * Contiene su información personal y la referencia al cine que administra.
+ */
 public class AdministradorCine {
 
     private String idAdmin;

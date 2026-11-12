@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa una función cinematográfica.
+ * Relaciona una película con una sala, una fecha y un precio.
+ */
 public class Funcion {
 
     private String idFuncion;

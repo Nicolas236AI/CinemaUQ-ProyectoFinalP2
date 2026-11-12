@@ -1,5 +1,9 @@
 package co.uniquindio.edu.poo.model;
-
+/**
+ * Representa un reporte operativo que puede exportarse.
+ * Utiliza la interfaz IExportador para delegar la exportación
+ * a diferentes formatos de archivo.
+ */
 public class ReporteExportable extends ReporteOperativo {
 
     private String nombre;
@@ -10,17 +14,29 @@ public class ReporteExportable extends ReporteOperativo {
         this.exportador = exportador;
     }
 
+    /**
+     * Genera el reporte procesando sus datos y delegando
+     * la exportación al componente correspondiente.
+     */
     @Override
     public void generarReporte() {
         procesarDatos();
         exportador.exportar(obtenerDatos());
     }
 
+    /**
+     * Procesa la información necesaria para construir el reporte.
+     */
     @Override
     public void procesarDatos() {
         System.out.println("Procesando datos del reporte exportable: " + nombre);
     }
 
+    /**
+     * Obtiene el contenido textual del reporte.
+     *
+     * @return información del reporte.
+     */
     @Override
     public String obtenerDatos() {
         return "Reporte exportable: " + nombre;

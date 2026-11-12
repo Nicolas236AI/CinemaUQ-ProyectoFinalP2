@@ -1,5 +1,10 @@
 package co.uniquindio.edu.poo.model;
 
+/**
+ * Clase abstracta que representa los reportes visuales del sistema.
+ * Define las propiedades y operaciones comunes para la representación
+ * de diferentes tipos de gráficos.
+ */
 public abstract class ReporteVisual extends ReporteOperativo {
 
     protected int anchoVentana;
@@ -12,6 +17,10 @@ public abstract class ReporteVisual extends ReporteOperativo {
         this.tituloGrafico = tituloGrafico;
     }
 
+    /**
+     * Define la operación encargada de representar visualmente
+     * la información del reporte.
+     */
     public abstract void renderizarVista();
 
     public int getAnchoVentana() {
