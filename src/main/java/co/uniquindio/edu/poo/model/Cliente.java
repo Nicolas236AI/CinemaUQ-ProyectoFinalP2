@@ -106,4 +106,9 @@ public class Cliente implements IClienteObserver {
     public String toString() {
         return "Cliente [idCliente=" + idCliente + ", nombre=" + nombre + ", correo=" + correo + "]";
     }
+
+    @Override
+    public void actualizar(String mensaje) {
+
+    }
 }

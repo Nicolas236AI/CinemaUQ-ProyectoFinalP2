@@ -6,6 +6,8 @@ package co.uniquindio.edu.poo.model;
  */
 public interface IClienteObserver {
 
+    void actualizar();
+
     /**
      * Permite recibir y procesar las notificaciones enviadas
      * por el centro de notificaciones.
