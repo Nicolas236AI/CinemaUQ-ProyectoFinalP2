@@ -1,8 +1,7 @@
 package co.uniquindio.edu.poo.viewController;
 
-import co.uniquindio.edu.poo.model.Cinema;
+import co.uniquindio.edu.poo.controller.ControlGeneral;
 import co.uniquindio.edu.poo.model.Cliente;
-import co.uniquindio.edu.poo.model.Funcion;
 import co.uniquindio.edu.poo.model.Sala;
 
 import javafx.collections.FXCollections;
@@ -18,9 +17,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Optional;
 
+/**
+ * Vista de administración (salas y clientes). Solo maneja los componentes
+ * gráficos; la lógica de negocio se delega en ControlGeneral.
+ */
 public class AdministracionController {
 
-    private final Cinema cinema = Cinema.getInstancia();
+    private final ControlGeneral control = new ControlGeneral();
 
     private ObservableList<Sala> salas;
     private ObservableList<Cliente> clientes;
@@ -89,13 +92,8 @@ public class AdministracionController {
     @FXML
     private void initialize() {
 
-        salas = FXCollections.observableArrayList(
-                cinema.getListaSalas()
-        );
-
-        clientes = FXCollections.observableArrayList(
-                cinema.getListaClientes()
-        );
+        salas = FXCollections.observableArrayList(control.obtenerSalas());
+        clientes = FXCollections.observableArrayList(control.obtenerClientes());
 
         configurarTablaSalas();
         configurarTablaClientes();
@@ -110,33 +108,15 @@ public class AdministracionController {
     }
 
     private void configurarTablaSalas() {
-
-        columnaIdSala.setCellValueFactory(
-                new PropertyValueFactory<>("idSala")
-        );
-
-        columnaNumeroSala.setCellValueFactory(
-                new PropertyValueFactory<>("numeroSala")
-        );
-
-        columnaCapacidad.setCellValueFactory(
-                new PropertyValueFactory<>("capacidad")
-        );
+        columnaIdSala.setCellValueFactory(new PropertyValueFactory<>("idSala"));
+        columnaNumeroSala.setCellValueFactory(new PropertyValueFactory<>("numeroSala"));
+        columnaCapacidad.setCellValueFactory(new PropertyValueFactory<>("capacidad"));
     }
 
     private void configurarTablaClientes() {
-
-        columnaIdCliente.setCellValueFactory(
-                new PropertyValueFactory<>("idCliente")
-        );
-
-        columnaNombreCliente.setCellValueFactory(
-                new PropertyValueFactory<>("nombre")
-        );
-
-        columnaCorreoCliente.setCellValueFactory(
-                new PropertyValueFactory<>("correo")
-        );
+        columnaIdCliente.setCellValueFactory(new PropertyValueFactory<>("idCliente"));
+        columnaNombreCliente.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        columnaCorreoCliente.setCellValueFactory(new PropertyValueFactory<>("correo"));
     }
 
     private void configurarSeleccionSalas() {
@@ -146,17 +126,9 @@ public class AdministracionController {
                 .addListener((observable, anterior, seleccionada) -> {
 
                     if (seleccionada != null) {
-                        campoIdSala.setText(
-                                String.valueOf(seleccionada.getIdSala())
-                        );
-
-                        campoNumeroSala.setText(
-                                String.valueOf(seleccionada.getNumeroSala())
-                        );
-
-                        campoCapacidad.setText(
-                                String.valueOf(seleccionada.getCapacidad())
-                        );
+                        campoIdSala.setText(String.valueOf(seleccionada.getIdSala()));
+                        campoNumeroSala.setText(String.valueOf(seleccionada.getNumeroSala()));
+                        campoCapacidad.setText(String.valueOf(seleccionada.getCapacidad()));
                     }
                 });
     }
@@ -168,71 +140,26 @@ public class AdministracionController {
                 .addListener((observable, anterior, seleccionada) -> {
 
                     if (seleccionada != null) {
-                        campoIdCliente.setText(
-                                seleccionada.getIdCliente()
-                        );
-
-                        campoNombreCliente.setText(
-                                seleccionada.getNombre()
-                        );
-
-                        campoCorreoCliente.setText(
-                                seleccionada.getCorreo()
-                        );
+                        campoIdCliente.setText(seleccionada.getIdCliente());
+                        campoNombreCliente.setText(seleccionada.getNombre());
+                        campoCorreoCliente.setText(seleccionada.getCorreo());
                     }
                 });
     }
 
     // =====================================================
-    // CRUD DE SALAS
+    // SALAS
     // =====================================================
 
     @FXML
     private void registrarSala() {
 
         try {
-
-            int id = Integer.parseInt(campoIdSala.getText().trim());
-            int numero = Integer.parseInt(campoNumeroSala.getText().trim());
-            int capacidad = Integer.parseInt(campoCapacidad.getText().trim());
-
-            if (id <= 0 || numero <= 0 || capacidad <= 0) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "Datos inválidos",
-                        "El ID, número y capacidad deben ser mayores que cero."
-                );
-                return;
-            }
-
-            if (existeIdSala(id, null)) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "ID duplicado",
-                        "Ya existe una sala con ese identificador."
-                );
-                return;
-            }
-
-            if (existeNumeroSala(numero, null)) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "Número duplicado",
-                        "Ya existe una sala con ese número."
-                );
-                return;
-            }
-
-            Sala nuevaSala = new Sala(
-                    id,
-                    numero,
-                    capacidad,
-                    cinema
+            control.registrarSala(
+                    leerEntero(campoIdSala),
+                    leerEntero(campoNumeroSala),
+                    leerEntero(campoCapacidad)
             );
-
-            nuevaSala.configurarAsientos();
-
-            cinema.getListaSalas().add(nuevaSala);
 
             cargarSalas();
             limpiarCamposSala();
@@ -240,81 +167,25 @@ public class AdministracionController {
             actualizarMensaje("Sala registrada correctamente.");
 
         } catch (NumberFormatException e) {
-
-            mostrarAlerta(
-                    Alert.AlertType.ERROR,
-                    "Datos incorrectos",
-                    "Introduce números enteros válidos para el ID, número y capacidad."
-            );
+            mostrarAlerta(Alert.AlertType.ERROR, "Datos incorrectos",
+                    "Introduce números enteros válidos para el ID, número y capacidad.");
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Datos inválidos", e.getMessage());
         }
     }
 
     @FXML
     private void actualizarSala() {
 
-        Sala seleccionada = tablaSalas.getSelectionModel()
-                .getSelectedItem();
-
-        if (seleccionada == null) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Selecciona una sala",
-                    "Debes seleccionar una sala de la tabla."
-            );
-            return;
-        }
+        Sala seleccionada = tablaSalas.getSelectionModel().getSelectedItem();
 
         try {
-
-            int id = Integer.parseInt(campoIdSala.getText().trim());
-            int numero = Integer.parseInt(campoNumeroSala.getText().trim());
-            int capacidad = Integer.parseInt(campoCapacidad.getText().trim());
-
-            if (id <= 0 || numero <= 0 || capacidad <= 0) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "Datos inválidos",
-                        "Todos los valores deben ser mayores que cero."
-                );
-                return;
-            }
-
-            if (existeIdSala(id, seleccionada)) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "ID duplicado",
-                        "Otra sala ya utiliza ese identificador."
-                );
-                return;
-            }
-
-            if (existeNumeroSala(numero, seleccionada)) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "Número duplicado",
-                        "Otra sala ya utiliza ese número."
-                );
-                return;
-            }
-
-            boolean tieneFunciones = tieneFuncionesAsociadas(seleccionada);
-
-            if (tieneFunciones && capacidad != seleccionada.getCapacidad()) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "Capacidad protegida",
-                        "No puedes cambiar la capacidad de una sala que tiene funciones programadas."
-                );
-                return;
-            }
-
-            seleccionada.setIdSala(id);
-            seleccionada.setNumeroSala(numero);
-            seleccionada.setCapacidad(capacidad);
-
-            if (!tieneFunciones) {
-                seleccionada.configurarAsientos();
-            }
+            control.actualizarSala(
+                    seleccionada,
+                    leerEntero(campoIdSala),
+                    leerEntero(campoNumeroSala),
+                    leerEntero(campoCapacidad)
+            );
 
             cargarSalas();
             tablaSalas.getSelectionModel().select(seleccionada);
@@ -322,36 +193,21 @@ public class AdministracionController {
             actualizarMensaje("Sala actualizada correctamente.");
 
         } catch (NumberFormatException e) {
-
-            mostrarAlerta(
-                    Alert.AlertType.ERROR,
-                    "Datos incorrectos",
-                    "Introduce números enteros válidos."
-            );
+            mostrarAlerta(Alert.AlertType.ERROR, "Datos incorrectos",
+                    "Introduce números enteros válidos.");
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Datos inválidos", e.getMessage());
         }
     }
 
     @FXML
     private void eliminarSala() {
 
-        Sala seleccionada = tablaSalas.getSelectionModel()
-                .getSelectedItem();
+        Sala seleccionada = tablaSalas.getSelectionModel().getSelectedItem();
 
         if (seleccionada == null) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Selecciona una sala",
-                    "Debes seleccionar una sala para eliminarla."
-            );
-            return;
-        }
-
-        if (tieneFuncionesAsociadas(seleccionada)) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Sala en uso",
-                    "No puedes eliminar esta sala porque tiene funciones asociadas."
-            );
+            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona una sala",
+                    "Debes seleccionar una sala para eliminarla.");
             return;
         }
 
@@ -365,12 +221,17 @@ public class AdministracionController {
             return;
         }
 
-        cinema.getListaSalas().remove(seleccionada);
+        try {
+            control.eliminarSala(seleccionada);
 
-        cargarSalas();
-        limpiarCamposSala();
+            cargarSalas();
+            limpiarCamposSala();
 
-        actualizarMensaje("Sala eliminada correctamente.");
+            actualizarMensaje("Sala eliminada correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sala en uso", e.getMessage());
+        }
     }
 
     @FXML
@@ -384,165 +245,65 @@ public class AdministracionController {
     }
 
     private void cargarSalas() {
-
-        salas.setAll(cinema.getListaSalas());
+        salas.setAll(control.obtenerSalas());
         tablaSalas.refresh();
     }
 
-    private boolean existeIdSala(int id, Sala excluida) {
-
-        return cinema.getListaSalas().stream()
-                .anyMatch(sala ->
-                        sala != excluida && sala.getIdSala() == id
-                );
-    }
-
-    private boolean existeNumeroSala(int numero, Sala excluida) {
-
-        return cinema.getListaSalas().stream()
-                .anyMatch(sala ->
-                        sala != excluida && sala.getNumeroSala() == numero
-                );
-    }
-
-    private boolean tieneFuncionesAsociadas(Sala sala) {
-
-        return cinema.getListaFunciones().stream()
-                .anyMatch(funcion -> funcion.getSala() == sala);
-    }
-
     // =====================================================
-    // CRUD DE CLIENTES
+    // CLIENTES
     // =====================================================
 
     @FXML
     private void registrarCliente() {
 
-        String id = campoIdCliente.getText().trim();
-        String nombre = campoNombreCliente.getText().trim();
-        String correo = campoCorreoCliente.getText().trim();
-
-        if (id.isEmpty() || nombre.isEmpty() || correo.isEmpty()) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Campos incompletos",
-                    "Debes completar todos los campos del cliente."
+        try {
+            control.registrarCliente(
+                    campoIdCliente.getText().trim(),
+                    campoNombreCliente.getText().trim(),
+                    campoCorreoCliente.getText().trim()
             );
-            return;
+
+            cargarClientes();
+            limpiarCamposCliente();
+
+            actualizarMensaje("Cliente registrado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Datos inválidos", e.getMessage());
         }
-
-        if (!correo.matches("^[\\w.+-]+@[\\w.-]+\\.[A-Za-z]{2,}$")) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Correo inválido",
-                    "Introduce una dirección de correo válida."
-            );
-            return;
-        }
-
-        if (existeIdCliente(id, null)) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Cliente duplicado",
-                    "Ya existe un cliente con ese identificador."
-            );
-            return;
-        }
-
-        Cliente nuevoCliente = new Cliente(
-                id,
-                nombre,
-                correo,
-                cinema
-        );
-
-        cinema.registrarCliente(nuevoCliente);
-
-        cargarClientes();
-        limpiarCamposCliente();
-
-        actualizarMensaje("Cliente registrado correctamente.");
     }
 
     @FXML
     private void actualizarCliente() {
 
-        Cliente seleccionado = tablaClientes.getSelectionModel()
-                .getSelectedItem();
+        Cliente seleccionado = tablaClientes.getSelectionModel().getSelectedItem();
 
-        if (seleccionado == null) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Selecciona un cliente",
-                    "Debes seleccionar un cliente de la tabla."
+        try {
+            control.actualizarCliente(
+                    seleccionado,
+                    campoIdCliente.getText().trim(),
+                    campoNombreCliente.getText().trim(),
+                    campoCorreoCliente.getText().trim()
             );
-            return;
+
+            cargarClientes();
+            tablaClientes.getSelectionModel().select(seleccionado);
+
+            actualizarMensaje("Cliente actualizado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Datos inválidos", e.getMessage());
         }
-
-        String id = campoIdCliente.getText().trim();
-        String nombre = campoNombreCliente.getText().trim();
-        String correo = campoCorreoCliente.getText().trim();
-
-        if (id.isEmpty() || nombre.isEmpty() || correo.isEmpty()) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Campos incompletos",
-                    "Debes completar todos los campos."
-            );
-            return;
-        }
-
-        if (!correo.matches("^[\\w.+-]+@[\\w.-]+\\.[A-Za-z]{2,}$")) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Correo inválido",
-                    "Introduce una dirección de correo válida."
-            );
-            return;
-        }
-
-        if (existeIdCliente(id, seleccionado)) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Identificador duplicado",
-                    "Otro cliente ya utiliza ese identificador."
-            );
-            return;
-        }
-
-        seleccionado.setIdCliente(id);
-        seleccionado.setNombre(nombre);
-        seleccionado.setCorreo(correo);
-
-        cargarClientes();
-        tablaClientes.getSelectionModel().select(seleccionado);
-
-        actualizarMensaje("Cliente actualizado correctamente.");
     }
 
     @FXML
     private void eliminarCliente() {
 
-        Cliente seleccionado = tablaClientes.getSelectionModel()
-                .getSelectedItem();
+        Cliente seleccionado = tablaClientes.getSelectionModel().getSelectedItem();
 
         if (seleccionado == null) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Selecciona un cliente",
-                    "Debes seleccionar un cliente para eliminarlo."
-            );
-            return;
-        }
-
-        if (seleccionado.getListaCompras() != null
-                && !seleccionado.getListaCompras().isEmpty()) {
-
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Cliente con compras",
-                    "No puedes eliminar este cliente porque tiene compras registradas."
-            );
+            mostrarAlerta(Alert.AlertType.WARNING, "Selecciona un cliente",
+                    "Debes seleccionar un cliente para eliminarlo.");
             return;
         }
 
@@ -556,12 +317,17 @@ public class AdministracionController {
             return;
         }
 
-        cinema.getListaClientes().remove(seleccionado);
+        try {
+            control.eliminarCliente(seleccionado);
 
-        cargarClientes();
-        limpiarCamposCliente();
+            cargarClientes();
+            limpiarCamposCliente();
 
-        actualizarMensaje("Cliente eliminado correctamente.");
+            actualizarMensaje("Cliente eliminado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Cliente con compras", e.getMessage());
+        }
     }
 
     @FXML
@@ -575,23 +341,20 @@ public class AdministracionController {
     }
 
     private void cargarClientes() {
-
-        clientes.setAll(cinema.getListaClientes());
+        clientes.setAll(control.obtenerClientes());
         tablaClientes.refresh();
     }
 
-    private boolean existeIdCliente(String id, Cliente excluido) {
+    // =====================================================
+    // MÉTODOS AUXILIARES DE VISTA
+    // =====================================================
 
-        return cinema.getListaClientes().stream()
-                .anyMatch(cliente ->
-                        cliente != excluido
-                                && cliente.getIdCliente().equalsIgnoreCase(id)
-                );
+    /**
+     * Convierte el texto de un campo en entero.
+     */
+    private int leerEntero(TextField campo) {
+        return Integer.parseInt(campo.getText().trim());
     }
-
-    // =====================================================
-    // MÉTODOS AUXILIARES
-    // =====================================================
 
     private boolean confirmarAccion(String titulo, String contenido) {
 
@@ -603,15 +366,10 @@ public class AdministracionController {
 
         Optional<ButtonType> resultado = alerta.showAndWait();
 
-        return resultado.isPresent()
-                && resultado.get() == ButtonType.OK;
+        return resultado.isPresent() && resultado.get() == ButtonType.OK;
     }
 
-    private void mostrarAlerta(
-            Alert.AlertType tipo,
-            String titulo,
-            String contenido
-    ) {
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String contenido) {
 
         Alert alerta = new Alert(tipo);
 
@@ -623,7 +381,6 @@ public class AdministracionController {
     }
 
     private void actualizarMensaje(String mensaje) {
-
         mensajeEstado.setText(mensaje);
     }
 }

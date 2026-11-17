@@ -1,7 +1,7 @@
 
 package co.uniquindio.edu.poo.viewController;
 
-import co.uniquindio.edu.poo.model.Cinema;
+import co.uniquindio.edu.poo.controller.ControlGeneral;
 import co.uniquindio.edu.poo.model.Pelicula;
 
 import javafx.collections.FXCollections;
@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -16,6 +17,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Optional;
 
+/**
+ * Vista de la cartelera. Solo maneja los componentes gráficos;
+ * la lógica de negocio se delega en ControlGeneral.
+ */
 public class CarteleraController {
 
     @FXML
@@ -46,9 +51,9 @@ public class CarteleraController {
     private TextField campoGenero;
 
     @FXML
-    private javafx.scene.control.Label mensajeEstado;
+    private Label mensajeEstado;
 
-    private final Cinema cinema = Cinema.getInstancia();
+    private final ControlGeneral control = new ControlGeneral();
 
     private final ObservableList<Pelicula> peliculas =
             FXCollections.observableArrayList();
@@ -68,81 +73,42 @@ public class CarteleraController {
     }
 
     private void configurarTabla() {
-        columnaId.setCellValueFactory(
-                new PropertyValueFactory<>("idPelicula")
-        );
-
-        columnaTitulo.setCellValueFactory(
-                new PropertyValueFactory<>("titulo")
-        );
-
-        columnaDuracion.setCellValueFactory(
-                new PropertyValueFactory<>("duracion")
-        );
-
-        columnaGenero.setCellValueFactory(
-                new PropertyValueFactory<>("genero")
-        );
+        columnaId.setCellValueFactory(new PropertyValueFactory<>("idPelicula"));
+        columnaTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        columnaDuracion.setCellValueFactory(new PropertyValueFactory<>("duracion"));
+        columnaGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
     }
 
     private void cargarPeliculas() {
-        peliculas.setAll(cinema.getListaPeliculas());
+        peliculas.setAll(control.obtenerPeliculas());
         tablaPeliculas.setItems(peliculas);
 
-        actualizarMensaje();
+        mensajeEstado.setText("Películas registradas: " + peliculas.size());
     }
 
     @FXML
     private void registrarPelicula() {
-        String id = campoId.getText().trim();
-        String titulo = campoTitulo.getText().trim();
-        String duracionTexto = campoDuracion.getText().trim();
-        String genero = campoGenero.getText().trim();
-
-        if (id.isEmpty() || titulo.isEmpty()
-                || duracionTexto.isEmpty() || genero.isEmpty()) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Campos incompletos",
-                    "Completa todos los campos para registrar la película."
-            );
-            return;
-        }
-
-        int duracion;
-
         try {
-            duracion = Integer.parseInt(duracionTexto);
+            int duracion = leerDuracion();
 
-            if (duracion <= 0) {
-                throw new NumberFormatException();
-            }
+            control.registrarPelicula(
+                    campoId.getText().trim(),
+                    campoTitulo.getText().trim(),
+                    duracion,
+                    campoGenero.getText().trim()
+            );
+
+            cargarPeliculas();
+            limpiarCampos();
+
+            mensajeEstado.setText("Película registrada correctamente.");
+
         } catch (NumberFormatException e) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Duración inválida",
-                    "La duración debe ser un número entero mayor que cero."
-            );
-            return;
+            mostrarAlerta("Duración inválida",
+                    "La duración debe ser un número entero mayor que cero.");
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Datos inválidos", e.getMessage());
         }
-
-        if (existeId(id)) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Identificación duplicada",
-                    "Ya existe una película con ese identificador."
-            );
-            return;
-        }
-
-        Pelicula nueva = new Pelicula(id, titulo, duracion, genero);
-
-        cinema.registrarPelicula(nueva);
-
-        cargarPeliculas();
-        limpiarCampos();
-
-        mensajeEstado.setText("Película registrada correctamente.");
     }
 
     @FXML
@@ -150,67 +116,29 @@ public class CarteleraController {
         Pelicula seleccionada =
                 tablaPeliculas.getSelectionModel().getSelectedItem();
 
-        if (seleccionada == null) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Sin selección",
-                    "Selecciona una película de la tabla para actualizarla."
-            );
-            return;
-        }
-
-        String id = campoId.getText().trim();
-        String titulo = campoTitulo.getText().trim();
-        String duracionTexto = campoDuracion.getText().trim();
-        String genero = campoGenero.getText().trim();
-
-        if (id.isEmpty() || titulo.isEmpty()
-                || duracionTexto.isEmpty() || genero.isEmpty()) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Campos incompletos",
-                    "Completa todos los campos antes de actualizar."
-            );
-            return;
-        }
-
-        int duracion;
-
         try {
-            duracion = Integer.parseInt(duracionTexto);
+            int duracion = leerDuracion();
 
-            if (duracion <= 0) {
-                throw new NumberFormatException();
-            }
+            control.actualizarPelicula(
+                    seleccionada,
+                    campoId.getText().trim(),
+                    campoTitulo.getText().trim(),
+                    duracion,
+                    campoGenero.getText().trim()
+            );
+
+            tablaPeliculas.refresh();
+            cargarPeliculas();
+            limpiarCampos();
+
+            mensajeEstado.setText("Película actualizada correctamente.");
+
         } catch (NumberFormatException e) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Duración inválida",
-                    "La duración debe ser un número entero mayor que cero."
-            );
-            return;
+            mostrarAlerta("Duración inválida",
+                    "La duración debe ser un número entero mayor que cero.");
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Datos inválidos", e.getMessage());
         }
-
-        if (!seleccionada.getIdPelicula().equalsIgnoreCase(id)
-                && existeId(id)) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Identificación duplicada",
-                    "Otra película ya utiliza ese identificador."
-            );
-            return;
-        }
-
-        seleccionada.setIdPelicula(id);
-        seleccionada.setTitulo(titulo);
-        seleccionada.setDuracion(duracion);
-        seleccionada.setGenero(genero);
-
-        tablaPeliculas.refresh();
-        cargarPeliculas();
-        limpiarCampos();
-
-        mensajeEstado.setText("Película actualizada correctamente.");
     }
 
     @FXML
@@ -219,32 +147,29 @@ public class CarteleraController {
                 tablaPeliculas.getSelectionModel().getSelectedItem();
 
         if (seleccionada == null) {
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Sin selección",
-                    "Selecciona una película para eliminarla."
-            );
+            mostrarAlerta("Sin selección", "Selecciona una película para eliminarla.");
             return;
         }
 
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Eliminar película");
         confirmacion.setHeaderText("¿Deseas eliminar esta película?");
-        confirmacion.setContentText(
-                "Se eliminará: " + seleccionada.getTitulo()
-        );
+        confirmacion.setContentText("Se eliminará: " + seleccionada.getTitulo());
 
         Optional<ButtonType> resultado = confirmacion.showAndWait();
 
-        if (resultado.isPresent()
-                && resultado.get() == ButtonType.OK) {
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            try {
+                control.eliminarPelicula(seleccionada);
 
-            cinema.getListaPeliculas().remove(seleccionada);
+                cargarPeliculas();
+                limpiarCampos();
 
-            cargarPeliculas();
-            limpiarCampos();
+                mensajeEstado.setText("Película eliminada correctamente.");
 
-            mensajeEstado.setText("Película eliminada correctamente.");
+            } catch (IllegalArgumentException e) {
+                mostrarAlerta("Datos inválidos", e.getMessage());
+            }
         }
     }
 
@@ -261,36 +186,27 @@ public class CarteleraController {
     private void mostrarDatosSeleccionados(Pelicula pelicula) {
         campoId.setText(pelicula.getIdPelicula());
         campoTitulo.setText(pelicula.getTitulo());
-        campoDuracion.setText(
-                String.valueOf(pelicula.getDuracion())
-        );
+        campoDuracion.setText(String.valueOf(pelicula.getDuracion()));
         campoGenero.setText(pelicula.getGenero());
 
-        mensajeEstado.setText(
-                "Película seleccionada: " + pelicula.getTitulo()
-        );
+        mensajeEstado.setText("Película seleccionada: " + pelicula.getTitulo());
     }
 
-    private boolean existeId(String id) {
-        return cinema.getListaPeliculas().stream()
-                .anyMatch(p -> p.getIdPelicula() != null
-                        && p.getIdPelicula().equalsIgnoreCase(id));
+    /**
+     * Convierte el texto del campo de duración a entero.
+     */
+    private int leerDuracion() {
+        String texto = campoDuracion.getText().trim();
+
+        if (texto.isEmpty()) {
+            return 0; // ControlGeneral informará que faltan datos o que la duración es inválida
+        }
+
+        return Integer.parseInt(texto);
     }
 
-    private void actualizarMensaje() {
-        int cantidad = peliculas.size();
-
-        mensajeEstado.setText(
-                "Películas registradas: " + cantidad
-        );
-    }
-
-    private void mostrarAlerta(
-            Alert.AlertType tipo,
-            String titulo,
-            String contenido
-    ) {
-        Alert alerta = new Alert(tipo);
+    private void mostrarAlerta(String titulo, String contenido) {
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);
         alerta.setContentText(contenido);
