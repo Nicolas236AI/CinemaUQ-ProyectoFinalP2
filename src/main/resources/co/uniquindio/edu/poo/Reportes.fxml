@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.uniquindio.edu.poo.viewController.ReportesController"
+      spacing="18"
+      style="-fx-background-color: #111827;"
+      prefWidth="900"
+      prefHeight="650">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <Label text="Reportes operativos"
+           style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+
+    <Label text="Consulta estadísticas e información general del cine."
+           style="-fx-text-fill: #AAB7CC; -fx-font-size: 14px;"/>
+
+    <Separator/>
+
+    <HBox spacing="10">
+        <Button text="Actualizar reporte"
+                onAction="#generarReporte"
+                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Button text="Exportar TXT"
+                onAction="#exportarTxt"
+                style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Button text="Exportar PDF"
+                onAction="#exportarPdf"
+                style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <Label text="Contenido del reporte"
+           style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <TextArea fx:id="areaReporte"
+              editable="false"
+              wrapText="false"
+              VBox.vgrow="ALWAYS"
+              style="-fx-control-inner-background: #202B40;
+                     -fx-text-fill: #E5E7EB;
+                     -fx-font-family: monospace;
+                     -fx-font-size: 13px;"/>
+
+    <Label fx:id="mensajeEstado"
+           text="Reporte operativo"
+           style="-fx-text-fill: #93C5FD; -fx-font-size: 13px;"/>
+
+</VBox>

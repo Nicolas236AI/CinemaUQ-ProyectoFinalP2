@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="panelPrincipal"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.uniquindio.edu.poo.viewController.PanelPrincipalController"
+            style="-fx-background-color: #111827;">
+
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="15"
+              style="-fx-background-color: #1B263B; -fx-padding: 20;">
+
+            <Label text="CINEMA"
+                   style="-fx-text-fill: #E34B55; -fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+            <Label text="UQ"
+                   style="-fx-text-fill: white; -fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label text="Sistema de gestión cinematográfica"
+                   style="-fx-text-fill: #B8C5D9; -fx-font-size: 13px;"/>
+
+        </HBox>
+    </top>
+
+    <left>
+        <VBox spacing="15"
+              prefWidth="220"
+              style="-fx-background-color: #1B263B; -fx-padding: 20;">
+
+            <Label text="MENÚ PRINCIPAL"
+                   style="-fx-text-fill: #8292AA; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+
+            <Button text="⌂  Inicio"
+                    onAction="#mostrarInicio"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 12;"/>
+
+            <Button text="🎬  Cartelera"
+                    onAction="#mostrarCartelera"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 12;"/>
+
+            <Button text="◷  Funciones"
+                    onAction="#mostrarFunciones"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 12;"/>
+
+            <Button text="▣  Compras"
+                    onAction="#mostrarCompras"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 12;"/>
+
+            <Button text="▤  Reportes"
+                    onAction="#mostrarReportes"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 12;"/>
+
+            <Button text="⚙  Administración"
+                    onAction="#mostrarAdministracion"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 12;"/>
+
+        </VBox>
+    </left>
+
+    <center>
+        <VBox fx:id="vistaInicio"
+              spacing="20"
+              style="-fx-padding: 35;">
+
+            <Label fx:id="tituloContenido"
+                   text="Bienvenido a CinemaUQ"
+                   style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;"/>
+
+            <Label fx:id="descripcionContenido"
+                   text="Administra tu experiencia cinematográfica desde un solo lugar."
+                   wrapText="true"
+                   style="-fx-text-fill: #B8C5D9; -fx-font-size: 15px;"/>
+
+            <VBox spacing="12"
+                  style="-fx-background-color: #202B40; -fx-background-radius: 12; -fx-padding: 25;">
+
+                <Label text="Bienvenido al sistema"
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <Label text="Gestiona películas, funciones, compras y reportes desde el menú lateral."
+                       wrapText="true"
+                       style="-fx-text-fill: #B8C5D9; -fx-font-size: 14px;"/>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT"
+              style="-fx-background-color: #1B263B; -fx-padding: 12 20;">
+
+            <Label fx:id="mensajeEstado"
+                   text="Panel principal"
+                   style="-fx-text-fill: #E34B55; -fx-font-size: 12px;"/>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

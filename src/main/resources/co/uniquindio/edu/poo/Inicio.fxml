@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="co.uniquindio.edu.poo.controller.InicioController"
+        prefWidth="1100"
+        prefHeight="700"
+        style="-fx-background-color: #10131C;">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: #191E2B; -fx-padding: 22 40 22 40;">
+
+            <Label text="CINEMA"
+                   style="-fx-text-fill: white; -fx-font-size: 27px; -fx-font-weight: bold;"/>
+
+            <Label text="UQ"
+                   style="-fx-text-fill: #E63946; -fx-font-size: 27px; -fx-font-weight: bold;"/>
+
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="25">
+
+            <Label text="BIENVENIDO A CINEMAUQ"
+                   style="-fx-text-fill: white; -fx-font-size: 38px; -fx-font-weight: bold;"/>
+
+            <Label text="Tu experiencia cinematográfica comienza aquí"
+                   style="-fx-text-fill: #AAB2C5; -fx-font-size: 18px;"/>
+
+            <Button text="COMENZAR"
+                    onAction="#iniciarSesion"
+                    style="-fx-background-color: #E63946;
+                           -fx-text-fill: white;
+                           -fx-font-size: 16px;
+                           -fx-font-weight: bold;
+                           -fx-padding: 14 35 14 35;
+                           -fx-background-radius: 8;"/>
+
+            <Label fx:id="mensaje"
+                   style="-fx-text-fill: #E63946; -fx-font-size: 16px;"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

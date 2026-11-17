@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.uniquindio.edu.poo.viewController.FuncionesController"
+      spacing="18"
+      style="-fx-background-color: #111827;">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <Label text="Gestión de funciones"
+           style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+
+    <Label text="Registra, consulta, actualiza y elimina las funciones del cine."
+           style="-fx-text-fill: #B8C5D9; -fx-font-size: 14px;"/>
+
+    <Separator/>
+
+    <Label text="Información de la función"
+           style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="15">
+        <VBox spacing="7" HBox.hgrow="ALWAYS">
+            <Label text="ID de función"
+                   style="-fx-text-fill: #D1D5DB;"/>
+            <TextField fx:id="campoIdFuncion"
+                       promptText="Ej: F001"/>
+        </VBox>
+
+        <VBox spacing="7" HBox.hgrow="ALWAYS">
+            <Label text="Fecha y hora"
+                   style="-fx-text-fill: #D1D5DB;"/>
+            <TextField fx:id="campoFechaHora"
+                       promptText="2026-12-20 18:30"/>
+        </VBox>
+
+        <VBox spacing="7" HBox.hgrow="ALWAYS">
+            <Label text="Precio base"
+                   style="-fx-text-fill: #D1D5DB;"/>
+            <TextField fx:id="campoPrecio"
+                       promptText="Ej: 15000"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="15">
+        <VBox spacing="7" HBox.hgrow="ALWAYS">
+            <Label text="Película"
+                   style="-fx-text-fill: #D1D5DB;"/>
+            <ComboBox fx:id="comboPeliculas"
+                      promptText="Selecciona una película"
+                      maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="7" HBox.hgrow="ALWAYS">
+            <Label text="Sala"
+                   style="-fx-text-fill: #D1D5DB;"/>
+            <ComboBox fx:id="comboSalas"
+                      promptText="Selecciona una sala"
+                      maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="10">
+        <Button text="Registrar"
+                onAction="#registrarFuncion"
+                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Button text="Actualizar"
+                onAction="#actualizarFuncion"
+                style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Button text="Eliminar"
+                onAction="#eliminarFuncion"
+                style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Button text="Limpiar"
+                onAction="#limpiarCampos"
+                style="-fx-background-color: #374151; -fx-text-fill: white;"/>
+    </HBox>
+
+    <Separator/>
+
+    <Label text="Funciones registradas"
+           style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tablaFunciones"
+               VBox.vgrow="ALWAYS"
+               style="-fx-background-color: #1F2937;">
+
+        <columns>
+            <TableColumn fx:id="columnaId"
+                         text="ID"
+                         prefWidth="90"/>
+
+            <TableColumn fx:id="columnaFecha"
+                         text="Fecha y hora"
+                         prefWidth="180"/>
+
+            <TableColumn fx:id="columnaPrecio"
+                         text="Precio"
+                         prefWidth="110"/>
+
+            <TableColumn fx:id="columnaPelicula"
+                         text="Película"
+                         prefWidth="200"/>
+
+            <TableColumn fx:id="columnaSala"
+                         text="Sala"
+                         prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <Label fx:id="mensajeEstado"
+           text="Funciones registradas: 0"
+           style="-fx-text-fill: #93C5FD; -fx-font-size: 13px;"/>
+
+</VBox>
