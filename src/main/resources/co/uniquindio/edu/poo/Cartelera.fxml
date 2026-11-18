@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.uniquindio.edu.poo.viewController.CarteleraController"
+      spacing="15"
+      style="-fx-background-color: #111827;"
+      prefWidth="900"
+      prefHeight="650">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <Label text="Gestión de cartelera"
+           style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+
+    <Label text="Consulta las películas disponibles o administra el catálogo de CinemaUQ."
+           style="-fx-text-fill: #AAB7CC; -fx-font-size: 14px;"/>
+
+    <Separator/>
+
+    <VBox fx:id="panelFormularioPelicula" spacing="12">
+        <Label text="Información de la película"
+               style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="12">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="ID de película" style="-fx-text-fill: #D1D5DB;"/>
+                <TextField fx:id="campoId" promptText="Ej: P001"/>
+            </VBox>
+
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Título" style="-fx-text-fill: #D1D5DB;"/>
+                <TextField fx:id="campoTitulo" promptText="Nombre de la película"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="12">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Duración (minutos)" style="-fx-text-fill: #D1D5DB;"/>
+                <TextField fx:id="campoDuracion" promptText="Ej: 120"/>
+            </VBox>
+
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Género" style="-fx-text-fill: #D1D5DB;"/>
+                <TextField fx:id="campoGenero" promptText="Ej: Ciencia ficción"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="10">
+            <Button text="Registrar"
+                    onAction="#registrarPelicula"
+                    style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <Button text="Actualizar"
+                    onAction="#actualizarPelicula"
+                    style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <Button text="Eliminar"
+                    onAction="#eliminarPelicula"
+                    style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <Button text="Limpiar"
+                    onAction="#limpiarCampos"
+                    style="-fx-background-color: #374151; -fx-text-fill: white;"/>
+        </HBox>
+
+        <Separator/>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Películas en cartelera"
+               style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;"/>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="campoBuscarPelicula"
+                   promptText="Buscar por título o género..."
+                   prefWidth="260"
+                   onKeyReleased="#filtrarPeliculas"/>
+    </HBox>
+
+    <TableView fx:id="tablaPeliculas"
+               VBox.vgrow="ALWAYS">
+
+        <placeholder>
+            <Label text="No hay películas registradas."/>
+        </placeholder>
+
+        <columns>
+            <TableColumn fx:id="columnaId"
+                         text="ID"
+                         prefWidth="110"/>
+
+            <TableColumn fx:id="columnaTitulo"
+                         text="Título"
+                         prefWidth="280"/>
+
+            <TableColumn fx:id="columnaDuracion"
+                         text="Duración (min)"
+                         prefWidth="140"/>
+
+            <TableColumn fx:id="columnaGenero"
+                         text="Género"
+                         prefWidth="220"/>
+        </columns>
+    </TableView>
+
+    <Label fx:id="mensajeEstado"
+           text="Listo."
+           style="-fx-text-fill: #93C5FD; -fx-font-size: 13px;"/>
+
+</VBox>

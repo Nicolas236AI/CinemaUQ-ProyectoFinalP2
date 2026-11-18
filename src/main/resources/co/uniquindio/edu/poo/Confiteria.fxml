@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.uniquindio.edu.poo.viewController.ConfiteriaController"
+      spacing="15"
+      style="-fx-background-color: #111827;"
+      prefWidth="900"
+      prefHeight="650">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Confitería, Combos y Promociones"
+           style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+
+    <Label text="Administra el catálogo de confitería, arma combos y configura promociones vigentes."
+           style="-fx-text-fill: #AAB7CC; -fx-font-size: 14px;"/>
+
+    <Separator/>
+
+    <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Productos y Combos">
+                <VBox spacing="15" style="-fx-background-color: #172235; -fx-padding: 20;">
+
+                    <Label text="Registrar producto individual"
+                           style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="10">
+                        <TextField fx:id="campoIdProducto" promptText="ID (Ej: PROD-03)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="campoNombreProducto" promptText="Nombre del producto" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="campoPrecioProducto" promptText="Precio (Ej: 12000)" HBox.hgrow="ALWAYS"/>
+                        <Button text="Agregar Producto"
+                                onAction="#registrarProducto"
+                                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <Label text="Crear Combo (Patrón Composite)"
+                           style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="10">
+                        <TextField fx:id="campoNombreCombo" promptText="Nombre del combo (Ej: Combo Pareja)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="campoPrecioCombo" promptText="Precio especial del combo" HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="comboProductoParaCombo" promptText="Producto a incluir" HBox.hgrow="ALWAYS"/>
+                        <Button text="Incluir ítem"
+                                onAction="#agregarProductoACombo"
+                                style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+                        <Button text="Guardar Combo"
+                                onAction="#registrarCombo"
+                                style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <Label text="Catálogo activo de confitería y combos"
+                           style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <ListView fx:id="listaCatalogoConfiteria" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Promociones">
+                <VBox spacing="15" style="-fx-background-color: #172235; -fx-padding: 20;">
+
+                    <Label text="Registrar nueva promoción (Patrón Strategy)"
+                           style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="10">
+                        <ComboBox fx:id="comboTipoPromocion" promptText="Tipo (Estudiante / Fidelidad)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="campoPorcentajePromocion" promptText="Porcentaje descuento (Ej: 15)" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="campoPuntosRequeridosPromo" promptText="Puntos requeridos (si aplica)" HBox.hgrow="ALWAYS"/>
+                        <Button text="Registrar Promoción"
+                                onAction="#registrarPromocion"
+                                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <ListView fx:id="listaPromocionesActivas" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+
+    <Label fx:id="mensajeEstado"
+           text="Catálogo de confitería y promociones listo."
+           style="-fx-text-fill: #93C5FD; -fx-font-size: 13px;"/>
+
+</VBox>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="panelPrincipal"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.uniquindio.edu.poo.viewController.PanelPrincipalController"
+            style="-fx-background-color: #111827;">
+
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="15"
+              style="-fx-background-color: #1B263B; -fx-padding: 20;">
+
+            <Label text="CINEMA"
+                   style="-fx-text-fill: #E34B55; -fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+            <Label text="UQ"
+                   style="-fx-text-fill: white; -fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="etiquetaUsuarioActivo"
+                   text="Usuario: Invitado"
+                   style="-fx-text-fill: #93C5FD; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+
+            <Button text="Cerrar sesión"
+                    onAction="#cerrarSesion"
+                    style="-fx-background-color: #E34B55; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6 14;"/>
+
+        </HBox>
+    </top>
+
+    <left>
+        <VBox spacing="11"
+              prefWidth="230"
+              style="-fx-background-color: #1B263B; -fx-padding: 20;">
+
+            <Label text="MENÚ PRINCIPAL"
+                   style="-fx-text-fill: #8292AA; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+
+            <Button fx:id="btnInicio"
+                    text="⌂  Inicio"
+                    onAction="#mostrarInicio"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Button fx:id="btnCartelera"
+                    text="🎬  Cartelera"
+                    onAction="#mostrarCartelera"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Button fx:id="btnFunciones"
+                    text="◷  Funciones"
+                    onAction="#mostrarFunciones"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Button fx:id="btnReservarAsientos"
+                    text="💺  Reservar y Asientos"
+                    onAction="#mostrarSeleccionAsientos"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 11;"/>
+
+            <Button fx:id="btnMiCuenta"
+                    text="💳  Mi Tarjeta y Puntos"
+                    onAction="#mostrarMiCuenta"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Separator/>
+
+            <Label fx:id="etiquetaMenuAdmin"
+                   text="OPERACIÓN ADMIN"
+                   style="-fx-text-fill: #8292AA; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+
+            <Button fx:id="btnConfiteria"
+                    text="🍿  Confitería y Combos"
+                    onAction="#mostrarConfiteria"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Button fx:id="btnCompras"
+                    text="▣  Historial Compras"
+                    onAction="#mostrarCompras"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Button fx:id="btnReportes"
+                    text="▤  Reportes y Gráficos"
+                    onAction="#mostrarReportes"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+            <Button fx:id="btnAdministracion"
+                    text="⚙  Administración"
+                    onAction="#mostrarAdministracion"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #293950; -fx-text-fill: white; -fx-padding: 11;"/>
+
+        </VBox>
+    </left>
+
+    <center>
+        <VBox fx:id="vistaInicio"
+              spacing="20"
+              style="-fx-padding: 35;">
+
+            <Label fx:id="tituloContenido"
+                   text="Bienvenido a CinemaUQ"
+                   style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;"/>
+
+            <Label fx:id="descripcionContenido"
+                   text="Administra tu experiencia cinematográfica desde un solo lugar."
+                   wrapText="true"
+                   style="-fx-text-fill: #B8C5D9; -fx-font-size: 15px;"/>
+
+            <HBox spacing="15">
+                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #202B40; -fx-background-radius: 12; -fx-padding: 20;">
+                    <Label text="Películas en Cartelera" style="-fx-text-fill: #8292AA; -fx-font-size: 12px;"/>
+                    <Label fx:id="statPeliculas" text="0" style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #202B40; -fx-background-radius: 12; -fx-padding: 20;">
+                    <Label text="Funciones Programadas" style="-fx-text-fill: #8292AA; -fx-font-size: 12px;"/>
+                    <Label fx:id="statFunciones" text="0" style="-fx-text-fill: #93C5FD; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #202B40; -fx-background-radius: 12; -fx-padding: 20;">
+                    <Label text="Compras Completadas" style="-fx-text-fill: #8292AA; -fx-font-size: 12px;"/>
+                    <Label fx:id="statCompras" text="0" style="-fx-text-fill: #34D399; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #202B40; -fx-background-radius: 12; -fx-padding: 20;">
+                    <Label text="Ingresos Totales" style="-fx-text-fill: #8292AA; -fx-font-size: 12px;"/>
+                    <Label fx:id="statIngresos" text="\$0" style="-fx-text-fill: #E34B55; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="12"
+                  style="-fx-background-color: #202B40; -fx-background-radius: 12; -fx-padding: 25;">
+
+                <Label text="Accesos rápidos"
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <Label text="Selecciona una función para elegir asientos en el mapa de sala, agregar combos de confitería, aplicar descuentos y pagar con tu tarjeta virtual."
+                       wrapText="true"
+                       style="-fx-text-fill: #B8C5D9; -fx-font-size: 14px;"/>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT"
+              style="-fx-background-color: #1B263B; -fx-padding: 12 20;">
+
+            <Label fx:id="mensajeEstado"
+                   text="Panel principal"
+                   style="-fx-text-fill: #E34B55; -fx-font-size: 12px;"/>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>
