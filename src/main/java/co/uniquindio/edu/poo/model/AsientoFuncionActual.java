@@ -11,6 +11,7 @@ public class AsientoFuncionActual {
     private EstadoAsiento estadoAsiento;
     private Funcion ownedByFuncion;
     private LocalDateTime horaBloqueo;
+    private java.time.LocalDateTime fechaExpiracionReserva;
 
     /**
      * Metodo constructor de la clase AsientoFuncionActual para inicializar sus valores
@@ -92,9 +93,12 @@ public class AsientoFuncionActual {
      * Metodo que sirve para bloquear el asiento 10 munutos una vez seleccionado
      */
     public void bloquearAsiento() {
+        verificarExpiracionReserva();
+        if (!verificarDisponibilidad()) {
+            throw new IllegalStateException("El asiento no está disponible.");
+        }
         this.estadoAsiento = EstadoAsiento.SELECCIONADO;
-        this.horaBloqueo = LocalDateTime.now();
-        System.out.println("Asiento " + idAsientoFuncion + " bloqueado temporalmente por 10 minutos.");
+        this.fechaExpiracionReserva = java.time.LocalDateTime.now().plusMinutes(10);
     }
 
     /**
@@ -102,8 +106,7 @@ public class AsientoFuncionActual {
      */
     public void liberarAsiento() {
         this.estadoAsiento = EstadoAsiento.DISPONIBLE;
-        this.horaBloqueo = null;
-        System.out.println("Asiento " + idAsientoFuncion + " liberado y disponible.");
+        this.fechaExpiracionReserva = null;
     }
 
     /**
@@ -111,7 +114,7 @@ public class AsientoFuncionActual {
      * @return verdadero si está disponible
      */
     public boolean verificarDisponibilidad() {
-        liberarSiExpiro();
+        verificarExpiracionReserva();
         return this.estadoAsiento == EstadoAsiento.DISPONIBLE;
     }
 
@@ -119,19 +122,22 @@ public class AsientoFuncionActual {
      * Metodo que verifica si ya transcurrieron 10 minutos desde que se apartó el asiento temporalmente.
      * @return verdadero si el tiempo de reserva expiró.
      */
-    public boolean verificarExpiracion() {
-        if (this.estadoAsiento == EstadoAsiento.SELECCIONADO && this.horaBloqueo != null) {
-            long minutosTranscurridos = ChronoUnit.MINUTES.between(this.horaBloqueo, LocalDateTime.now());
-            return minutosTranscurridos >= 10;
+    public boolean verificarExpiracionReserva() {
+        if (this.estadoAsiento == EstadoAsiento.SELECCIONADO
+                && this.fechaExpiracionReserva != null
+                && java.time.LocalDateTime.now().isAfter(this.fechaExpiracionReserva)) {
+            liberarAsiento();
+            return true;
         }
         return false;
     }
+
 
     /**
      * Metodo que sirve para liberar automáticamente el asiento si el tiempo de reserva de 10 minutos ha caducado.
      */
     public void liberarSiExpiro() {
-        if (verificarExpiracion()) {
+        if (verificarExpiracionReserva()) {
             liberarAsiento();
         }
     }

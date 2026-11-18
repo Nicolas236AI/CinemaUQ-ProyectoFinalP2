@@ -1,55 +1,78 @@
 package co.uniquindio.edu.poo.model;
 
-/**
- * Representa un reporte visual de tipo gráfico de líneas.
- * Permite mostrar el comportamiento de la información (por ejemplo ventas
- * o recargas) a lo largo del tiempo.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class GraficoLinea extends ReporteVisual {
 
     private String datos;
+    private List<String> fechas;
+    private List<Double> montosPorFecha;
 
+    /**
+     * Construye un reporte visual de gráfico de líneas.
+     *
+     * @param anchoVentana  ancho del gráfico.
+     * @param altoVentana   alto del gráfico.
+     * @param tituloGrafico título del gráfico.
+     */
     public GraficoLinea(int anchoVentana, int altoVentana, String tituloGrafico) {
         super(anchoVentana, altoVentana, tituloGrafico);
+        this.fechas = new ArrayList<>();
+        this.montosPorFecha = new ArrayList<>();
+    }
+
+    public List<String> getFechas() {
+        return fechas;
+    }
+
+    public List<Double> getMontosPorFecha() {
+        return montosPorFecha;
     }
 
     /**
-     * Genera el reporte ejecutando el procesamiento de los datos
-     * y posteriormente mostrando su representación visual.
-     */
-    @Override
-    public void generarReporte() {
-        procesarDatos();
-        renderizarVista();
-    }
-
-    /**
-     * Prepara la información que será utilizada en el gráfico.
+     * Agrupa los montos de ventas completadas por fecha para trazar su evolución temporal.
      */
     @Override
     public void procesarDatos() {
-        datos = obtenerDatos();
+        fechas.clear();
+        montosPorFecha.clear();
+        Cinema cinema = Cinema.getInstancia();
+        for (Compra compra : cinema.getListaCompras()) {
+            if (compra.getEstado() == EstadoCompra.COMPLETADA && compra.getFecha() != null) {
+                int indice = fechas.indexOf(compra.getFecha());
+                if (indice == -1) {
+                    fechas.add(compra.getFecha());
+                    montosPorFecha.add(compra.getTotal());
+                } else {
+                    montosPorFecha.set(indice, montosPorFecha.get(indice) + compra.getTotal());
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < fechas.size(); i++) {
+            sb.append(fechas.get(i)).append(": $").append(montosPorFecha.get(i)).append("\n");
+        }
+        datos = sb.toString();
     }
 
     /**
-     * Obtiene la información que se representará en el gráfico.
+     * Devuelve la serie temporal de ventas procesada.
      *
-     * @return datos destinados al gráfico de líneas.
+     * @return texto con los valores ordenados por fecha.
      */
     @Override
     public String obtenerDatos() {
-        return "Datos para el gráfico de líneas";
+        return datos;
     }
 
     /**
-     * Representa el gráfico mostrando su título, tipo de gráfico,
-     * información y dimensiones configuradas.
+     * Prepara la vista del gráfico de líneas con la serie temporal calculada.
      */
     @Override
     public void renderizarVista() {
-        System.out.println("=== " + tituloGrafico + " ===");
-        System.out.println("Tipo: Gráfico de líneas");
-        System.out.println(datos);
-        System.out.println("Dimensiones: " + anchoVentana + "x" + altoVentana);
+        if (datos == null) {
+            procesarDatos();
+        }
     }
 }

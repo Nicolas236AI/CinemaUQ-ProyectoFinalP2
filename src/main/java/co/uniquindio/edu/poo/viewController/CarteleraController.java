@@ -1,9 +1,7 @@
-
 package co.uniquindio.edu.poo.viewController;
 
 import co.uniquindio.edu.poo.controller.ControlGeneral;
 import co.uniquindio.edu.poo.model.Pelicula;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,14 +12,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
-/**
- * Vista de la cartelera. Solo maneja los componentes gráficos;
- * la lógica de negocio se delega en ControlGeneral.
- */
 public class CarteleraController {
+
+    private final ControlGeneral control = new ControlGeneral();
+    private final ObservableList<Pelicula> peliculas = FXCollections.observableArrayList();
+
+    @FXML
+    private VBox panelFormularioPelicula;
 
     @FXML
     private TableView<Pelicula> tablaPeliculas;
@@ -51,15 +52,17 @@ public class CarteleraController {
     private TextField campoGenero;
 
     @FXML
+    private TextField campoBuscarPelicula;
+
+    @FXML
     private Label mensajeEstado;
-
-    private final ControlGeneral control = new ControlGeneral();
-
-    private final ObservableList<Pelicula> peliculas =
-            FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
+        boolean esAdmin = control.esAdministradorActivo();
+        panelFormularioPelicula.setVisible(esAdmin);
+        panelFormularioPelicula.setManaged(esAdmin);
+
         configurarTabla();
         cargarPeliculas();
 
@@ -82,43 +85,40 @@ public class CarteleraController {
     private void cargarPeliculas() {
         peliculas.setAll(control.obtenerPeliculas());
         tablaPeliculas.setItems(peliculas);
+        mensajeEstado.setText("Películas en cartelera: " + peliculas.size());
+    }
 
-        mensajeEstado.setText("Películas registradas: " + peliculas.size());
+    @FXML
+    private void filtrarPeliculas() {
+        peliculas.setAll(control.buscarPeliculas(campoBuscarPelicula.getText()));
+        mensajeEstado.setText("Resultados encontrados: " + peliculas.size());
     }
 
     @FXML
     private void registrarPelicula() {
         try {
             int duracion = leerDuracion();
-
             control.registrarPelicula(
                     campoId.getText().trim(),
                     campoTitulo.getText().trim(),
                     duracion,
                     campoGenero.getText().trim()
             );
-
             cargarPeliculas();
             limpiarCampos();
-
             mensajeEstado.setText("Película registrada correctamente.");
-
         } catch (NumberFormatException e) {
-            mostrarAlerta("Duración inválida",
-                    "La duración debe ser un número entero mayor que cero.");
-        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Duración inválida", "La duración debe ser un número entero mayor que cero.");
+        } catch (RuntimeException e) {
             mostrarAlerta("Datos inválidos", e.getMessage());
         }
     }
 
     @FXML
     private void actualizarPelicula() {
-        Pelicula seleccionada =
-                tablaPeliculas.getSelectionModel().getSelectedItem();
-
+        Pelicula seleccionada = tablaPeliculas.getSelectionModel().getSelectedItem();
         try {
             int duracion = leerDuracion();
-
             control.actualizarPelicula(
                     seleccionada,
                     campoId.getText().trim(),
@@ -126,26 +126,20 @@ public class CarteleraController {
                     duracion,
                     campoGenero.getText().trim()
             );
-
             tablaPeliculas.refresh();
             cargarPeliculas();
             limpiarCampos();
-
             mensajeEstado.setText("Película actualizada correctamente.");
-
         } catch (NumberFormatException e) {
-            mostrarAlerta("Duración inválida",
-                    "La duración debe ser un número entero mayor que cero.");
-        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Duración inválida", "La duración debe ser un número entero mayor que cero.");
+        } catch (RuntimeException e) {
             mostrarAlerta("Datos inválidos", e.getMessage());
         }
     }
 
     @FXML
     private void eliminarPelicula() {
-        Pelicula seleccionada =
-                tablaPeliculas.getSelectionModel().getSelectedItem();
-
+        Pelicula seleccionada = tablaPeliculas.getSelectionModel().getSelectedItem();
         if (seleccionada == null) {
             mostrarAlerta("Sin selección", "Selecciona una película para eliminarla.");
             return;
@@ -157,17 +151,13 @@ public class CarteleraController {
         confirmacion.setContentText("Se eliminará: " + seleccionada.getTitulo());
 
         Optional<ButtonType> resultado = confirmacion.showAndWait();
-
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             try {
                 control.eliminarPelicula(seleccionada);
-
                 cargarPeliculas();
                 limpiarCampos();
-
                 mensajeEstado.setText("Película eliminada correctamente.");
-
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 mostrarAlerta("Datos inválidos", e.getMessage());
             }
         }
@@ -179,7 +169,6 @@ public class CarteleraController {
         campoTitulo.clear();
         campoDuracion.clear();
         campoGenero.clear();
-
         tablaPeliculas.getSelectionModel().clearSelection();
     }
 
@@ -188,20 +177,14 @@ public class CarteleraController {
         campoTitulo.setText(pelicula.getTitulo());
         campoDuracion.setText(String.valueOf(pelicula.getDuracion()));
         campoGenero.setText(pelicula.getGenero());
-
         mensajeEstado.setText("Película seleccionada: " + pelicula.getTitulo());
     }
 
-    /**
-     * Convierte el texto del campo de duración a entero.
-     */
     private int leerDuracion() {
         String texto = campoDuracion.getText().trim();
-
         if (texto.isEmpty()) {
-            return 0; // ControlGeneral informará que faltan datos o que la duración es inválida
+            return 0;
         }
-
         return Integer.parseInt(texto);
     }
 

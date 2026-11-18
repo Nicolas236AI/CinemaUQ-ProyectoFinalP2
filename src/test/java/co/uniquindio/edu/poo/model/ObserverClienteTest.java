@@ -42,8 +42,8 @@ public class ObserverClienteTest {
     }
 
     /**
-     * Prueba que el envío de notificaciones a los clientes registrados se ejecute
-     * correctamente sin lanzar excepciones.
+     * Prueba que el envío de notificaciones a los clientes registrados entregue el mensaje
+     * a todos los observadores suscritos.
      */
     @Test
     public void testNotificarClientes() {
@@ -55,6 +55,10 @@ public class ObserverClienteTest {
         notificador.agregarObservador(cliente1);
         notificador.agregarObservador(cliente2);
 
-        assertDoesNotThrow(() -> notificador.notificarClientes("Nueva función disponible en cartelera"));
+        notificador.notificarClientes("Nueva función disponible en cartelera");
+
+        assertEquals(1, cliente1.getNotificaciones().size());
+        assertEquals("Nueva función disponible en cartelera", cliente1.getNotificaciones().get(0));
+        assertEquals(1, cliente2.getNotificaciones().size());
     }
 }

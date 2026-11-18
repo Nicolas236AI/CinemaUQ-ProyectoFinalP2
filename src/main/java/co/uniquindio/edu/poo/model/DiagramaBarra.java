@@ -1,54 +1,70 @@
 package co.uniquindio.edu.poo.model;
-/**
- * Representa un reporte visual de tipo diagrama de barras.
- * Permite procesar y mostrar información mediante una representación
- * basada en barras.
- */
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class DiagramaBarra extends ReporteVisual {
 
     private String datos;
+    private List<String> etiquetas;
+    private List<Double> valores;
 
+    /**
+     * Construye un reporte visual de diagrama de barras.
+     *
+     * @param anchoVentana  ancho del gráfico.
+     * @param altoVentana   alto del gráfico.
+     * @param tituloGrafico título del gráfico.
+     */
     public DiagramaBarra(int anchoVentana, int altoVentana, String tituloGrafico) {
         super(anchoVentana, altoVentana, tituloGrafico);
+        this.etiquetas = new ArrayList<>();
+        this.valores = new ArrayList<>();
+    }
+
+    public List<String> getEtiquetas() {
+        return etiquetas;
+    }
+
+    public List<Double> getValores() {
+        return valores;
     }
 
     /**
-     * Genera el reporte ejecutando el procesamiento de los datos
-     * y posteriormente mostrando su representación visual.
-     */
-    @Override
-    public void generarReporte() {
-        procesarDatos();
-        renderizarVista();
-    }
-
-
-    /**
-     * Prepara la información que será utilizada en el diagrama.
+     * Calcula las entradas vendidas por cada película registrada en el cine.
      */
     @Override
     public void procesarDatos() {
-
-        datos = obtenerDatos();
+        etiquetas.clear();
+        valores.clear();
+        Cinema cinema = Cinema.getInstancia();
+        StringBuilder sb = new StringBuilder();
+        for (Pelicula pelicula : cinema.getListaPeliculas()) {
+            double entradas = cinema.contarEntradasPorPelicula(pelicula.getIdPelicula());
+            etiquetas.add(pelicula.getTitulo());
+            valores.add(entradas);
+            sb.append(pelicula.getTitulo()).append(": ").append((int) entradas).append(" entradas\n");
+        }
+        datos = sb.toString();
     }
+
     /**
-     * Obtiene la información que se representará en el gráfico.
+     * Devuelve los datos procesados para las barras del gráfico.
      *
-     * @return datos destinados al diagrama de barras.
+     * @return texto con las categorías y sus valores.
      */
     @Override
     public String obtenerDatos() {
-        return "Datos para el diagrama de barras";
+        return datos;
     }
+
     /**
-     * Representa el diagrama mostrando su título, tipo de gráfico,
-     * información y dimensiones configuradas.
+     * Prepara la vista del diagrama de barras con los datos consolidados.
      */
     @Override
     public void renderizarVista() {
-        System.out.println("=== " + tituloGrafico + " ===");
-        System.out.println("Tipo: Diagrama de barras");
-        System.out.println(datos);
-        System.out.println("Dimensiones: " + anchoVentana + "x" + altoVentana);
+        if (datos == null) {
+            procesarDatos();
+        }
     }
 }

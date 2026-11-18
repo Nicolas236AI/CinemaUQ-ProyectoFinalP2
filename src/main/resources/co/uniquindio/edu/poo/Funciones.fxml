@@ -24,7 +24,7 @@
     <Label text="Gestión de funciones"
            style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
 
-    <Label text="Registra, consulta, actualiza y elimina las funciones del cine."
+    <Label text="Registra, consulta, actualiza, elimina o cancela funciones del cine."
            style="-fx-text-fill: #B8C5D9; -fx-font-size: 14px;"/>
 
     <Separator/>
@@ -34,61 +34,39 @@
 
     <HBox spacing="15">
         <VBox spacing="7" HBox.hgrow="ALWAYS">
-            <Label text="ID de función"
-                   style="-fx-text-fill: #D1D5DB;"/>
-            <TextField fx:id="campoIdFuncion"
-                       promptText="Ej: F001"/>
+            <Label text="ID de función" style="-fx-text-fill: #D1D5DB;"/>
+            <TextField fx:id="campoIdFuncion" promptText="Ej: F001"/>
         </VBox>
 
         <VBox spacing="7" HBox.hgrow="ALWAYS">
-            <Label text="Fecha y hora"
-                   style="-fx-text-fill: #D1D5DB;"/>
-            <TextField fx:id="campoFechaHora"
-                       promptText="2026-12-20 18:30"/>
+            <Label text="Fecha y hora" style="-fx-text-fill: #D1D5DB;"/>
+            <TextField fx:id="campoFechaHora" promptText="2026-12-20 18:30"/>
         </VBox>
 
         <VBox spacing="7" HBox.hgrow="ALWAYS">
-            <Label text="Precio base"
-                   style="-fx-text-fill: #D1D5DB;"/>
-            <TextField fx:id="campoPrecio"
-                       promptText="Ej: 15000"/>
+            <Label text="Precio base" style="-fx-text-fill: #D1D5DB;"/>
+            <TextField fx:id="campoPrecio" promptText="Ej: 15000"/>
         </VBox>
     </HBox>
 
     <HBox spacing="15">
         <VBox spacing="7" HBox.hgrow="ALWAYS">
-            <Label text="Película"
-                   style="-fx-text-fill: #D1D5DB;"/>
-            <ComboBox fx:id="comboPeliculas"
-                      promptText="Selecciona una película"
-                      maxWidth="Infinity"/>
+            <Label text="Película" style="-fx-text-fill: #D1D5DB;"/>
+            <ComboBox fx:id="comboPeliculas" promptText="Selecciona una película" maxWidth="Infinity"/>
         </VBox>
 
         <VBox spacing="7" HBox.hgrow="ALWAYS">
-            <Label text="Sala"
-                   style="-fx-text-fill: #D1D5DB;"/>
-            <ComboBox fx:id="comboSalas"
-                      promptText="Selecciona una sala"
-                      maxWidth="Infinity"/>
+            <Label text="Sala" style="-fx-text-fill: #D1D5DB;"/>
+            <ComboBox fx:id="comboSalas" promptText="Selecciona una sala" maxWidth="Infinity"/>
         </VBox>
     </HBox>
 
     <HBox spacing="10">
-        <Button text="Registrar"
-                onAction="#registrarFuncion"
-                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
-
-        <Button text="Actualizar"
-                onAction="#actualizarFuncion"
-                style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;"/>
-
-        <Button text="Eliminar"
-                onAction="#eliminarFuncion"
-                style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
-
-        <Button text="Limpiar"
-                onAction="#limpiarCampos"
-                style="-fx-background-color: #374151; -fx-text-fill: white;"/>
+        <Button text="Registrar" onAction="#registrarFuncion" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button text="Actualizar" onAction="#actualizarFuncion" style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button text="Cancelar función (Reembolso 100%)" onAction="#cancelarFuncionPorCine" style="-fx-background-color: #9333EA; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button text="Eliminar" onAction="#eliminarFuncion" style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button text="Limpiar" onAction="#limpiarCampos" style="-fx-background-color: #374151; -fx-text-fill: white;"/>
     </HBox>
 
     <Separator/>
@@ -99,27 +77,12 @@
     <TableView fx:id="tablaFunciones"
                VBox.vgrow="ALWAYS"
                style="-fx-background-color: #1F2937;">
-
         <columns>
-            <TableColumn fx:id="columnaId"
-                         text="ID"
-                         prefWidth="90"/>
-
-            <TableColumn fx:id="columnaFecha"
-                         text="Fecha y hora"
-                         prefWidth="180"/>
-
-            <TableColumn fx:id="columnaPrecio"
-                         text="Precio"
-                         prefWidth="110"/>
-
-            <TableColumn fx:id="columnaPelicula"
-                         text="Película"
-                         prefWidth="200"/>
-
-            <TableColumn fx:id="columnaSala"
-                         text="Sala"
-                         prefWidth="150"/>
+            <TableColumn fx:id="columnaId" text="ID" prefWidth="90"/>
+            <TableColumn fx:id="columnaFecha" text="Fecha y hora" prefWidth="180"/>
+            <TableColumn fx:id="columnaPrecio" text="Precio" prefWidth="110"/>
+            <TableColumn fx:id="columnaPelicula" text="Película" prefWidth="200"/>
+            <TableColumn fx:id="columnaSala" text="Sala" prefWidth="150"/>
         </columns>
     </TableView>
 

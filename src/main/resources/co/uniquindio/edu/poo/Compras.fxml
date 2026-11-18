@@ -14,7 +14,7 @@
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="co.uniquindio.edu.poo.viewController.ComprasController"
-      spacing="18"
+      spacing="16"
       style="-fx-background-color: #111827;"
       prefWidth="900"
       prefHeight="650">
@@ -23,10 +23,10 @@
         <Insets top="25" right="30" bottom="25" left="30"/>
     </padding>
 
-    <Label text="Gestión de compras"
+    <Label text="Gestión e historial de compras"
            style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
 
-    <Label text="Registra, consulta, actualiza y cancela compras."
+    <Label text="Consulta, registra, actualiza o cancela compras aplicando políticas de reembolso."
            style="-fx-text-fill: #AAB7CC; -fx-font-size: 14px;"/>
 
     <Separator/>
@@ -85,7 +85,7 @@
                 onAction="#actualizarCompra"
                 style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-        <Button text="Cancelar compra"
+        <Button text="Cancelar y Reembolsar"
                 onAction="#cancelarCompra"
                 style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
@@ -96,8 +96,15 @@
 
     <Separator/>
 
-    <Label text="Compras registradas"
-           style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Compras registradas"
+               style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="comboFiltroEstado"
+                  promptText="Filtrar por estado"
+                  onAction="#filtrarCompras"
+                  prefWidth="180"/>
+    </HBox>
 
     <TableView fx:id="tablaCompras"
                VBox.vgrow="ALWAYS">
@@ -109,19 +116,23 @@
 
             <TableColumn fx:id="columnaFecha"
                          text="Fecha"
-                         prefWidth="150"/>
+                         prefWidth="145"/>
 
             <TableColumn fx:id="columnaTotal"
                          text="Total"
-                         prefWidth="100"/>
+                         prefWidth="105"/>
 
             <TableColumn fx:id="columnaEstado"
                          text="Estado"
-                         prefWidth="120"/>
+                         prefWidth="115"/>
+
+            <TableColumn fx:id="columnaReembolso"
+                         text="Reembolso"
+                         prefWidth="105"/>
 
             <TableColumn fx:id="columnaCliente"
                          text="Cliente"
-                         prefWidth="220"/>
+                         prefWidth="210"/>
         </columns>
     </TableView>
 

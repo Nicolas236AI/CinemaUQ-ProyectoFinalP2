@@ -1,11 +1,9 @@
-
 package co.uniquindio.edu.poo.viewController;
 
 import co.uniquindio.edu.poo.controller.ControlGeneral;
 import co.uniquindio.edu.poo.model.Funcion;
 import co.uniquindio.edu.poo.model.Pelicula;
 import co.uniquindio.edu.poo.model.Sala;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,22 +20,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
-/**
- * Vista de funciones. Solo maneja los componentes gráficos;
- * la lógica de negocio se delega en ControlGeneral.
- */
 public class FuncionesController {
 
     private final ControlGeneral control = new ControlGeneral();
 
-    private final ObservableList<Funcion> funciones =
-            FXCollections.observableArrayList();
-
-    private final ObservableList<Pelicula> peliculas =
-            FXCollections.observableArrayList();
-
-    private final ObservableList<Sala> salas =
-            FXCollections.observableArrayList();
+    private final ObservableList<Funcion> funciones = FXCollections.observableArrayList();
+    private final ObservableList<Pelicula> peliculas = FXCollections.observableArrayList();
+    private final ObservableList<Sala> salas = FXCollections.observableArrayList();
 
     @FXML private TextField campoIdFuncion;
     @FXML private TextField campoFechaHora;
@@ -57,7 +46,6 @@ public class FuncionesController {
 
     @FXML
     private void initialize() {
-
         peliculas.setAll(control.obtenerPeliculas());
         salas.setAll(control.obtenerSalas());
         funciones.setAll(control.obtenerFunciones());
@@ -86,10 +74,9 @@ public class FuncionesController {
 
     @FXML
     private void registrarFuncion() {
-
         try {
-            LocalDateTime fecha = leerFecha();
-            double precio = leerPrecio();
+            LocalDateTime fecha = control.parsearFecha(campoFechaHora.getText());
+            double precio = Double.parseDouble(campoPrecio.getText().trim());
 
             control.registrarFuncion(
                     campoIdFuncion.getText().trim(),
@@ -101,27 +88,22 @@ public class FuncionesController {
 
             cargarFunciones();
             limpiarCampos();
-
             actualizarMensaje("Función registrada correctamente.");
-
         } catch (DateTimeParseException e) {
             mostrarFechaInvalida();
         } catch (NumberFormatException e) {
             mostrarAlerta("Precio inválido", "Ingresa un precio numérico válido.");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             mostrarAlerta("Datos inválidos", e.getMessage());
         }
     }
 
     @FXML
     private void actualizarFuncion() {
-
-        Funcion seleccionada =
-                tablaFunciones.getSelectionModel().getSelectedItem();
-
+        Funcion seleccionada = tablaFunciones.getSelectionModel().getSelectedItem();
         try {
-            LocalDateTime fecha = leerFecha();
-            double precio = leerPrecio();
+            LocalDateTime fecha = control.parsearFecha(campoFechaHora.getText());
+            double precio = Double.parseDouble(campoPrecio.getText().trim());
 
             control.actualizarFuncion(
                     seleccionada,
@@ -134,24 +116,44 @@ public class FuncionesController {
 
             cargarFunciones();
             limpiarCampos();
-
             actualizarMensaje("Función actualizada correctamente.");
-
         } catch (DateTimeParseException e) {
             mostrarFechaInvalida();
         } catch (NumberFormatException e) {
             mostrarAlerta("Precio inválido", "Ingresa un precio numérico válido.");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             mostrarAlerta("Datos inválidos", e.getMessage());
         }
     }
 
     @FXML
+    private void cancelarFuncionPorCine() {
+        Funcion seleccionada = tablaFunciones.getSelectionModel().getSelectedItem();
+        if (seleccionada == null) {
+            mostrarAlerta("Selección", "Selecciona una función para cancelarla y reembolsar el 100%.");
+            return;
+        }
+
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Cancelar función por el cine");
+        alerta.setHeaderText("¿Deseas cancelar esta función y reembolsar el 100% a los clientes?");
+        alerta.setContentText("Función: " + seleccionada.getIdFuncion());
+
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            try {
+                control.cancelarFuncionPorCine(seleccionada);
+                cargarFunciones();
+                actualizarMensaje("Función cancelada y reembolsos del 100% acreditados.");
+            } catch (RuntimeException e) {
+                mostrarAlerta("Error al cancelar función", e.getMessage());
+            }
+        }
+    }
+
+    @FXML
     private void eliminarFuncion() {
-
-        Funcion seleccionada =
-                tablaFunciones.getSelectionModel().getSelectedItem();
-
+        Funcion seleccionada = tablaFunciones.getSelectionModel().getSelectedItem();
         if (seleccionada == null) {
             mostrarAlerta("Selección", "Selecciona una función para eliminar.");
             return;
@@ -163,17 +165,13 @@ public class FuncionesController {
         alerta.setContentText("ID: " + seleccionada.getIdFuncion());
 
         Optional<ButtonType> resultado = alerta.showAndWait();
-
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             try {
                 control.eliminarFuncion(seleccionada);
-
                 cargarFunciones();
                 limpiarCampos();
-
                 actualizarMensaje("Función eliminada correctamente.");
-
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 mostrarAlerta("Datos inválidos", e.getMessage());
             }
         }
@@ -181,39 +179,20 @@ public class FuncionesController {
 
     @FXML
     private void limpiarCampos() {
-
         campoIdFuncion.clear();
         campoFechaHora.clear();
         campoPrecio.clear();
-
         comboPeliculas.getSelectionModel().clearSelection();
         comboSalas.getSelectionModel().clearSelection();
-
         tablaFunciones.getSelectionModel().clearSelection();
     }
 
     private void cargarFuncion(Funcion funcion) {
-
         campoIdFuncion.setText(funcion.getIdFuncion());
         campoFechaHora.setText(control.formatearFecha(funcion.getFechaHora()));
         campoPrecio.setText(String.valueOf(funcion.getPrecioBase()));
-
         comboPeliculas.setValue(funcion.getPelicula());
         comboSalas.setValue(funcion.getSala());
-    }
-
-    /**
-     * Convierte el texto del campo de fecha en un LocalDateTime.
-     */
-    private LocalDateTime leerFecha() {
-        return control.parsearFecha(campoFechaHora.getText());
-    }
-
-    /**
-     * Convierte el texto del campo de precio en un número.
-     */
-    private double leerPrecio() {
-        return Double.parseDouble(campoPrecio.getText().trim());
     }
 
     private void cargarFunciones() {
@@ -222,8 +201,7 @@ public class FuncionesController {
     }
 
     private void mostrarFechaInvalida() {
-        mostrarAlerta("Fecha inválida",
-                "Usa el formato: yyyy-MM-dd HH:mm\nEjemplo: 2026-12-20 18:30");
+        mostrarAlerta("Fecha inválida", "Usa el formato: yyyy-MM-dd HH:mm\nEjemplo: 2026-12-20 18:30");
     }
 
     private void actualizarMensaje(String mensaje) {

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.uniquindio.edu.poo.viewController.MiCuentaController"
+      spacing="15"
+      style="-fx-background-color: #111827;"
+      prefWidth="900"
+      prefHeight="650">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Mi Tarjeta Virtual, Puntos y Compras"
+               style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="comboClienteCuenta" promptText="Seleccionar cuenta cliente" prefWidth="250"/>
+    </HBox>
+
+    <Separator/>
+
+    <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Tarjeta Virtual y Movimientos">
+                <VBox spacing="15" style="-fx-background-color: #172235; -fx-padding: 20;">
+
+                    <HBox spacing="15">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #202B40; -fx-padding: 15; -fx-background-radius: 8;">
+                            <Label text="ID Tarjeta Virtual" style="-fx-text-fill: #8292AA;"/>
+                            <Label fx:id="etiquetaIdTarjeta" text="---" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #202B40; -fx-padding: 15; -fx-background-radius: 8;">
+                            <Label text="Saldo Disponible" style="-fx-text-fill: #8292AA;"/>
+                            <Label fx:id="etiquetaSaldoTarjeta" text="COP 0.00" style="-fx-text-fill: #34D399; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="campoMontoRecarga" promptText="Monto a recargar (Ej: 50000)" prefWidth="240"/>
+                        <Button text="Solicitar Recarga al Administrador"
+                                onAction="#solicitarRecarga"
+                                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <Label text="Historial de movimientos de la tarjeta"
+                           style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <ListView fx:id="listaMovimientosTarjeta" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Puntos CinemaUQ y Redención">
+                <VBox spacing="15" style="-fx-background-color: #172235; -fx-padding: 20;">
+
+                    <HBox spacing="15" alignment="CENTER_LEFT"
+                          style="-fx-background-color: #202B40; -fx-padding: 15; -fx-background-radius: 8;">
+                        <VBox spacing="4">
+                            <Label text="Puntos Vigentes Disponibles" style="-fx-text-fill: #8292AA;"/>
+                            <Label fx:id="etiquetaPuntosVigentes" text="0 pts" style="-fx-text-fill: #F59E0B; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <HBox HBox.hgrow="ALWAYS"/>
+                        <Label text="Vigencia: 1 año (se redimen primero los más próximos a vencer)"
+                               style="-fx-text-fill: #AAB7CC; -fx-font-size: 12px;"/>
+                    </HBox>
+
+                    <Label text="Redimir puntos por beneficios:"
+                           style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="12">
+                        <Button text="Redimir Entrada (500 pts)"
+                                onAction="#redimirEntrada"
+                                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Redimir Producto Confitería (250 pts)"
+                                onAction="#redimirProducto"
+                                style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Redimir Combo (700 pts)"
+                                onAction="#redimirCombo"
+                                style="-fx-background-color: #D97706; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <Label text="Detalle de puntos acumulados y fechas de vencimiento"
+                           style="-fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+
+                    <ListView fx:id="listaLotesPuntos" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Mis Compras y Cancelaciones">
+                <VBox spacing="15" style="-fx-background-color: #172235; -fx-padding: 20;">
+
+                    <TableView fx:id="tablaMisCompras" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colMiCompraId" text="ID Compra" prefWidth="120"/>
+                            <TableColumn fx:id="colMiCompraFecha" text="Fecha" prefWidth="170"/>
+                            <TableColumn fx:id="colMiCompraTotal" text="Total" prefWidth="130"/>
+                            <TableColumn fx:id="colMiCompraEstado" text="Estado" prefWidth="140"/>
+                            <TableColumn fx:id="colMiCompraReembolso" text="Reembolsado" prefWidth="140"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Button text="Solicitar Cancelación y Reembolso"
+                                onAction="#cancelarCompraCliente"
+                                style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Label text="Regla: mayor a 24h (100%), 2h a 24h (80%), menor a 2h (No permitida)."
+                               style="-fx-text-fill: #AAB7CC; -fx-font-size: 12px;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+
+    <Label fx:id="mensajeEstado"
+           text="Consulta tu saldo, redime puntos o gestiona tus compras."
+           style="-fx-text-fill: #93C5FD; -fx-font-size: 13px;"/>
+
+</VBox>

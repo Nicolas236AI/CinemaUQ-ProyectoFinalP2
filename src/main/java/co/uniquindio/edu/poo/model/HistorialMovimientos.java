@@ -1,17 +1,24 @@
 package co.uniquindio.edu.poo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HistorialMovimientos {
+
     private String idHistorial;
     private Tarjeta tarjeta;
+    private List<String> listaMovimientos;
 
     /**
-     * metodo constructor de la clase HistorialMovimientos para inicializar sus valores
-     * @param idHistorial identificador del historial
-     * @param tarjeta tarjeta asociada
+     * Crea el historial de movimientos vinculado a una tarjeta virtual.
+     *
+     * @param idHistorial identificador único del historial.
+     * @param tarjeta     tarjeta virtual asociada.
      */
     public HistorialMovimientos(String idHistorial, Tarjeta tarjeta) {
         this.idHistorial = idHistorial;
         this.tarjeta = tarjeta;
+        this.listaMovimientos = new ArrayList<>();
     }
 
     public String getIdHistorial() {
@@ -30,15 +37,34 @@ public class HistorialMovimientos {
         this.tarjeta = tarjeta;
     }
 
+    public List<String> getListaMovimientos() {
+        return listaMovimientos;
+    }
+
+    public void setListaMovimientos(List<String> listaMovimientos) {
+        this.listaMovimientos = listaMovimientos;
+    }
+
     /**
-     * metodo que sirve para registrar un movimiento en el historial de la tarjeta
+     * Registra un movimiento genérico en el historial de la tarjeta.
      */
     public void registrarMovimiento() {
-        System.out.println("Registrando movimiento para la tarjeta: " + tarjeta.getIdTarjeta());
+        registrarMovimiento("Movimiento registrado en tarjeta " + (tarjeta != null ? tarjeta.getIdTarjeta() : ""));
+    }
+
+    /**
+     * Agrega el detalle de una transacción (compra, recarga o reembolso) al historial.
+     *
+     * @param detalleMovimiento descripción completa del movimiento realizado.
+     */
+    public void registrarMovimiento(String detalleMovimiento) {
+        if (detalleMovimiento != null && !detalleMovimiento.isBlank()) {
+            listaMovimientos.add(detalleMovimiento);
+        }
     }
 
     @Override
     public String toString() {
-        return "HistorialMovimientos [idHistorial=" + idHistorial + "]";
+        return "HistorialMovimientos [idHistorial=" + idHistorial + ", movimientos=" + listaMovimientos.size() + "]";
     }
 }

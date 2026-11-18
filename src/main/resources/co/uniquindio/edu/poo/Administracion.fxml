@@ -27,15 +27,13 @@
     <Label text="Administración"
            style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"/>
 
-    <Label text="Gestiona las salas y los clientes de CinemaUQ."
+    <Label text="Gestiona las salas, los clientes y las recargas de tarjetas virtuales de CinemaUQ."
            style="-fx-text-fill: #AAB7CC; -fx-font-size: 14px;"/>
 
     <Separator/>
 
     <TabPane VBox.vgrow="ALWAYS"
              tabClosingPolicy="UNAVAILABLE">
-
-        <!-- ================= SALAS ================= -->
 
         <tabs>
             <Tab text="Gestión de salas">
@@ -46,81 +44,45 @@
                            style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
 
                     <HBox spacing="12">
-
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="ID de sala"
-                                   style="-fx-text-fill: #DCE5F2;"/>
-                            <TextField fx:id="campoIdSala"
-                                       promptText="Ej: 1"/>
+                            <Label text="ID de sala" style="-fx-text-fill: #DCE5F2;"/>
+                            <TextField fx:id="campoIdSala" promptText="Ej: 1"/>
                         </VBox>
 
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Número de sala"
-                                   style="-fx-text-fill: #DCE5F2;"/>
-                            <TextField fx:id="campoNumeroSala"
-                                       promptText="Ej: 1"/>
+                            <Label text="Número de sala" style="-fx-text-fill: #DCE5F2;"/>
+                            <TextField fx:id="campoNumeroSala" promptText="Ej: 1"/>
                         </VBox>
 
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Capacidad"
-                                   style="-fx-text-fill: #DCE5F2;"/>
-                            <TextField fx:id="campoCapacidad"
-                                       promptText="Ej: 100"/>
+                            <Label text="Capacidad" style="-fx-text-fill: #DCE5F2;"/>
+                            <TextField fx:id="campoCapacidad" promptText="Ej: 100"/>
                         </VBox>
-
                     </HBox>
 
                     <HBox spacing="10">
-
-                        <Button text="Registrar"
-                                onAction="#registrarSala"
-                                style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
-
-                        <Button text="Actualizar"
-                                onAction="#actualizarSala"
-                                style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
-
-                        <Button text="Eliminar"
-                                onAction="#eliminarSala"
-                                style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
-
-                        <Button text="Limpiar"
-                                onAction="#limpiarCamposSala"/>
-
+                        <Button text="Registrar" onAction="#registrarSala" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                        <Button text="Actualizar" onAction="#actualizarSala" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+                        <Button text="Eliminar" onAction="#eliminarSala" style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+                        <Button text="Limpiar" onAction="#limpiarCamposSala"/>
                     </HBox>
 
                     <Separator/>
 
-                    <Label text="Salas registradas"
-                           style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;"/>
+                    <Label text="Salas registradas" style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;"/>
 
-                    <TableView fx:id="tablaSalas"
-                               VBox.vgrow="ALWAYS">
-
+                    <TableView fx:id="tablaSalas" VBox.vgrow="ALWAYS">
                         <placeholder>
                             <Label text="No hay salas registradas."/>
                         </placeholder>
-
                         <columns>
-                            <TableColumn fx:id="columnaIdSala"
-                                         text="ID"
-                                         prefWidth="150"/>
-
-                            <TableColumn fx:id="columnaNumeroSala"
-                                         text="Número"
-                                         prefWidth="180"/>
-
-                            <TableColumn fx:id="columnaCapacidad"
-                                         text="Capacidad"
-                                         prefWidth="180"/>
+                            <TableColumn fx:id="columnaIdSala" text="ID" prefWidth="150"/>
+                            <TableColumn fx:id="columnaNumeroSala" text="Número" prefWidth="180"/>
+                            <TableColumn fx:id="columnaCapacidad" text="Capacidad" prefWidth="180"/>
                         </columns>
-
                     </TableView>
-
                 </VBox>
             </Tab>
-
-            <!-- ================= CLIENTES ================= -->
 
             <Tab text="Gestión de clientes">
                 <VBox spacing="15"
@@ -130,80 +92,72 @@
                            style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
 
                     <HBox spacing="12">
-
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Identificación"
-                                   style="-fx-text-fill: #DCE5F2;"/>
-                            <TextField fx:id="campoIdCliente"
-                                       promptText="Ej: C001"/>
+                            <Label text="Identificación" style="-fx-text-fill: #DCE5F2;"/>
+                            <TextField fx:id="campoIdCliente" promptText="Ej: C001"/>
                         </VBox>
 
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Nombre"
-                                   style="-fx-text-fill: #DCE5F2;"/>
-                            <TextField fx:id="campoNombreCliente"
-                                       promptText="Nombre completo"/>
+                            <Label text="Nombre" style="-fx-text-fill: #DCE5F2;"/>
+                            <TextField fx:id="campoNombreCliente" promptText="Nombre completo"/>
                         </VBox>
 
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="Correo electrónico"
-                                   style="-fx-text-fill: #DCE5F2;"/>
-                            <TextField fx:id="campoCorreoCliente"
-                                       promptText="correo@ejemplo.com"/>
+                            <Label text="Correo electrónico" style="-fx-text-fill: #DCE5F2;"/>
+                            <TextField fx:id="campoCorreoCliente" promptText="correo@ejemplo.com"/>
                         </VBox>
-
                     </HBox>
 
                     <HBox spacing="10">
-
-                        <Button text="Registrar"
-                                onAction="#registrarCliente"
-                                style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
-
-                        <Button text="Actualizar"
-                                onAction="#actualizarCliente"
-                                style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
-
-                        <Button text="Eliminar"
-                                onAction="#eliminarCliente"
-                                style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
-
-                        <Button text="Limpiar"
-                                onAction="#limpiarCamposCliente"/>
-
+                        <Button text="Registrar" onAction="#registrarCliente" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                        <Button text="Actualizar" onAction="#actualizarCliente" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+                        <Button text="Eliminar" onAction="#eliminarCliente" style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+                        <Button text="Limpiar" onAction="#limpiarCamposCliente"/>
                     </HBox>
 
                     <Separator/>
 
-                    <Label text="Clientes registrados"
-                           style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;"/>
+                    <Label text="Clientes registrados" style="-fx-text-fill: white; -fx-font-size: 17px; -fx-font-weight: bold;"/>
 
-                    <TableView fx:id="tablaClientes"
-                               VBox.vgrow="ALWAYS">
-
+                    <TableView fx:id="tablaClientes" VBox.vgrow="ALWAYS">
                         <placeholder>
                             <Label text="No hay clientes registrados."/>
                         </placeholder>
-
                         <columns>
-                            <TableColumn fx:id="columnaIdCliente"
-                                         text="Identificación"
-                                         prefWidth="160"/>
-
-                            <TableColumn fx:id="columnaNombreCliente"
-                                         text="Nombre"
-                                         prefWidth="220"/>
-
-                            <TableColumn fx:id="columnaCorreoCliente"
-                                         text="Correo"
-                                         prefWidth="250"/>
+                            <TableColumn fx:id="columnaIdCliente" text="Identificación" prefWidth="160"/>
+                            <TableColumn fx:id="columnaNombreCliente" text="Nombre" prefWidth="220"/>
+                            <TableColumn fx:id="columnaCorreoCliente" text="Correo" prefWidth="250"/>
                         </columns>
-
                     </TableView>
-
                 </VBox>
             </Tab>
 
+            <Tab text="Recargas de Tarjetas Virtuales">
+                <VBox spacing="15"
+                      style="-fx-background-color: #172235; -fx-padding: 20;">
+
+                    <Label text="Solicitudes de recarga pendientes de aprobación"
+                           style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <TableView fx:id="tablaRecargas" VBox.vgrow="ALWAYS">
+                        <placeholder>
+                            <Label text="No hay solicitudes de recarga pendientes."/>
+                        </placeholder>
+                        <columns>
+                            <TableColumn fx:id="columnaIdRecarga" text="ID Solicitud" prefWidth="150"/>
+                            <TableColumn fx:id="columnaFechaRecarga" text="Fecha" prefWidth="160"/>
+                            <TableColumn fx:id="columnaMontoRecarga" text="Monto Solicitado" prefWidth="180"/>
+                            <TableColumn fx:id="columnaTarjetaRecarga" text="Tarjeta" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="10">
+                        <Button text="Aprobar y Acreditar Recarga"
+                                onAction="#aprobarRecargaSeleccionada"
+                                style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
         </tabs>
     </TabPane>
 

@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -11,51 +20,83 @@
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="co.uniquindio.edu.poo.viewController.ReportesController"
-      spacing="18"
+      spacing="15"
       style="-fx-background-color: #111827;"
-      prefWidth="900"
-      prefHeight="650">
+      prefWidth="920"
+      prefHeight="660">
 
     <padding>
         <Insets top="25" right="30" bottom="25" left="30"/>
     </padding>
 
-    <Label text="Reportes operativos"
+    <Label text="Reportes operativos y gráficos"
            style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
 
-    <Label text="Consulta estadísticas e información general del cine."
+    <Label text="Genera reportes exportables por periodo y visualiza estadísticas gráficas del cine."
            style="-fx-text-fill: #AAB7CC; -fx-font-size: 14px;"/>
 
     <Separator/>
 
-    <HBox spacing="10">
-        <Button text="Actualizar reporte"
-                onAction="#generarReporte"
-                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Reportes Exportables (TXT / PDF)">
+                <VBox spacing="12" style="-fx-background-color: #172235; -fx-padding: 18;">
 
-        <Button text="Exportar TXT"
-                onAction="#exportarTxt"
-                style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <ComboBox fx:id="comboTipoReporte" promptText="Tipo de reporte" prefWidth="240"/>
+                        <DatePicker fx:id="pickerFechaInicio" promptText="Fecha inicio"/>
+                        <DatePicker fx:id="pickerFechaFin" promptText="Fecha fin"/>
+                        <Button text="Generar"
+                                onAction="#generarReporte"
+                                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Exportar TXT"
+                                onAction="#exportarTxt"
+                                style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Exportar PDF"
+                                onAction="#exportarPdf"
+                                style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
 
-        <Button text="Exportar PDF"
-                onAction="#exportarPdf"
-                style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
-    </HBox>
+                    <TextArea fx:id="areaReporte"
+                              editable="false"
+                              wrapText="false"
+                              VBox.vgrow="ALWAYS"
+                              style="-fx-control-inner-background: #202B40;
+                                     -fx-text-fill: #E5E7EB;
+                                     -fx-font-family: monospace;
+                                     -fx-font-size: 13px;"/>
+                </VBox>
+            </Tab>
 
-    <Label text="Contenido del reporte"
-           style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Tab text="Reportes Visuales (Gráficos)">
+                <VBox spacing="12" style="-fx-background-color: #172235; -fx-padding: 18;">
 
-    <TextArea fx:id="areaReporte"
-              editable="false"
-              wrapText="false"
-              VBox.vgrow="ALWAYS"
-              style="-fx-control-inner-background: #202B40;
-                     -fx-text-fill: #E5E7EB;
-                     -fx-font-family: monospace;
-                     -fx-font-size: 13px;"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="Actualizar Gráficos"
+                                onAction="#actualizarGraficos"
+                                style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <HBox spacing="12" VBox.vgrow="ALWAYS">
+                        <BarChart fx:id="graficoBarras" title="Entradas por Película" HBox.hgrow="ALWAYS">
+                            <xAxis><CategoryAxis label="Película"/></xAxis>
+                            <yAxis><NumberAxis label="Entradas"/></yAxis>
+                        </BarChart>
+
+                        <PieChart fx:id="graficoPastel" title="Ocupación de Funciones (%)" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <LineChart fx:id="graficoLineas" title="Evolución de Ventas en el Tiempo" prefHeight="220">
+                        <xAxis><CategoryAxis label="Fecha"/></xAxis>
+                        <yAxis><NumberAxis label="Ingresos ($)"/></yAxis>
+                    </LineChart>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
 
     <Label fx:id="mensajeEstado"
-           text="Reporte operativo"
+           text="Reporte operativo listo."
            style="-fx-text-fill: #93C5FD; -fx-font-size: 13px;"/>
 
 </VBox>

@@ -1,25 +1,72 @@
 package co.uniquindio.edu.poo.model;
 
-/**
- * Clase abstracta que establece la estructura general de los reportes
- * operativos del sistema de cine.
- */
+import java.time.LocalDate;
+
 public abstract class ReporteOperativo {
-    /**
-     * Define el proceso de generación de un reporte operativo.
-     */
-    public abstract void generarReporte();
+
+    protected String titulo;
+    protected String fechaGeneracion;
+    protected AdministradorCine administradorCine;
 
     /**
-     * Establece el procesamiento de los datos necesarios para construir
-     * el reporte.
+     * Inicializa un reporte operativo asignando su título y la fecha actual de generación.
+     *
+     * @param titulo título descriptivo del reporte.
+     */
+    public ReporteOperativo(String titulo) {
+        this.titulo = titulo;
+        this.fechaGeneracion = LocalDate.now().toString();
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getFechaGeneracion() {
+        return fechaGeneracion;
+    }
+
+    public void setFechaGeneracion(String fechaGeneracion) {
+        this.fechaGeneracion = fechaGeneracion;
+    }
+
+    public AdministradorCine getAdministradorCine() {
+        return administradorCine;
+    }
+
+    public void setAdministradorCine(AdministradorCine administradorCine) {
+        this.administradorCine = administradorCine;
+    }
+
+    /**
+     * Define el algoritmo fijo (Template Method) para construir y generar cualquier reporte operativo.
+     */
+    public final void generarReporte() {
+        procesarDatos();
+        String datos = obtenerDatos();
+        finalizarGeneracion(datos);
+    }
+
+    /**
+     * Procesa y consolida la información necesaria desde el sistema del cine.
      */
     public abstract void procesarDatos();
 
     /**
-     * Permite obtener la información procesada del reporte.
+     * Construye y retorna la información formateada del reporte.
      *
-     * @return información correspondiente al reporte.
+     * @return cadena con los datos consolidados del reporte.
      */
     public abstract String obtenerDatos();
+
+    /**
+     * Ejecuta el paso final de salida del reporte (exportación o renderizado visual).
+     *
+     * @param datos datos procesados del reporte.
+     */
+    protected abstract void finalizarGeneracion(String datos);
 }

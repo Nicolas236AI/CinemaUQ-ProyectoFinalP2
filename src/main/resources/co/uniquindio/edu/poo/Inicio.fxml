@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Pos?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane
-        xmlns="http://javafx.com/javafx"
-        xmlns:fx="http://javafx.com/fxml"
-        fx:controller="co.uniquindio.edu.poo.controller.InicioController"
+        xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="co.uniquindio.edu.poo.viewController.InicioController"
         prefWidth="1100"
         prefHeight="700"
         style="-fx-background-color: #10131C;">
@@ -25,29 +31,130 @@
             <Label text="UQ"
                    style="-fx-text-fill: #E63946; -fx-font-size: 27px; -fx-font-weight: bold;"/>
 
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label text="Portal de Acceso — Clientes y Administración"
+                   style="-fx-text-fill: #AAB2C5; -fx-font-size: 14px;"/>
+
         </HBox>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="25">
+        <VBox alignment="CENTER" spacing="20">
+            <padding>
+                <Insets top="20" right="40" bottom="20" left="40"/>
+            </padding>
 
             <Label text="BIENVENIDO A CINEMAUQ"
-                   style="-fx-text-fill: white; -fx-font-size: 38px; -fx-font-weight: bold;"/>
+                   style="-fx-text-fill: white; -fx-font-size: 34px; -fx-font-weight: bold;"/>
 
-            <Label text="Tu experiencia cinematográfica comienza aquí"
-                   style="-fx-text-fill: #AAB2C5; -fx-font-size: 18px;"/>
+            <Label text="Inicia sesión con tu cuenta o regístrate para reservar entradas y acumular puntos"
+                   style="-fx-text-fill: #AAB2C5; -fx-font-size: 15px;"/>
 
-            <Button text="COMENZAR"
-                    onAction="#iniciarSesion"
-                    style="-fx-background-color: #E63946;
-                           -fx-text-fill: white;
-                           -fx-font-size: 16px;
-                           -fx-font-weight: bold;
-                           -fx-padding: 14 35 14 35;
-                           -fx-background-radius: 8;"/>
+            <TabPane maxWidth="520"
+                     tabClosingPolicy="UNAVAILABLE"
+                     style="-fx-background-color: #191E2B; -fx-background-radius: 12;">
+
+                <tabs>
+                    <Tab text="Iniciar Sesión">
+                        <VBox spacing="14"
+                              style="-fx-background-color: #191E2B; -fx-padding: 25;">
+
+                            <VBox spacing="5">
+                                <Label text="Perfil de acceso"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <ComboBox fx:id="comboRol"
+                                          promptText="Selecciona Cliente o Administrador"
+                                          maxWidth="Infinity"/>
+                            </VBox>
+
+                            <VBox spacing="5">
+                                <Label text="Correo electrónico"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <TextField fx:id="campoCorreoLogin"
+                                           promptText="usuario@uniquindio.edu.co"/>
+                            </VBox>
+
+                            <VBox spacing="5">
+                                <Label text="Contraseña"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <PasswordField fx:id="campoContrasenaLogin"
+                                               promptText="Ingresa tu contraseña"/>
+                            </VBox>
+
+                            <Button text="INGRESAR AL SISTEMA"
+                                    onAction="#iniciarSesion"
+                                    maxWidth="Infinity"
+                                    style="-fx-background-color: #E63946;
+                                           -fx-text-fill: white;
+                                           -fx-font-size: 14px;
+                                           -fx-font-weight: bold;
+                                           -fx-padding: 12 25;
+                                           -fx-background-radius: 8;"/>
+
+                            <Separator/>
+
+                            <Button text="ENTRAR EN MODO DEMOSTRACIÓN"
+                                    onAction="#ingresarModoDemo"
+                                    maxWidth="Infinity"
+                                    style="-fx-background-color: #293950;
+                                           -fx-text-fill: #DCE5F2;
+                                           -fx-font-size: 12px;
+                                           -fx-padding: 9 20;
+                                           -fx-background-radius: 8;"/>
+
+                        </VBox>
+                    </Tab>
+
+                    <Tab text="Registrar Cliente">
+                        <VBox spacing="12"
+                              style="-fx-background-color: #191E2B; -fx-padding: 25;">
+
+                            <VBox spacing="5">
+                                <Label text="Identificación (Cédula / ID)"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <TextField fx:id="campoIdRegistro"
+                                           promptText="Ej: CLI-02"/>
+                            </VBox>
+
+                            <VBox spacing="5">
+                                <Label text="Nombre completo"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <TextField fx:id="campoNombreRegistro"
+                                           promptText="Ej: Laura Gómez"/>
+                            </VBox>
+
+                            <VBox spacing="5">
+                                <Label text="Correo electrónico"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <TextField fx:id="campoCorreoRegistro"
+                                           promptText="laura@uniquindio.edu.co"/>
+                            </VBox>
+
+                            <VBox spacing="5">
+                                <Label text="Contraseña (mínimo 4 caracteres)"
+                                       style="-fx-text-fill: #DCE5F2; -fx-font-size: 13px;"/>
+                                <PasswordField fx:id="campoContrasenaRegistro"
+                                               promptText="Crea tu contraseña"/>
+                            </VBox>
+
+                            <Button text="CREAR CUENTA Y TARJETA VIRTUAL"
+                                    onAction="#registrarClienteNuevo"
+                                    maxWidth="Infinity"
+                                    style="-fx-background-color: #2563EB;
+                                           -fx-text-fill: white;
+                                           -fx-font-size: 14px;
+                                           -fx-font-weight: bold;
+                                           -fx-padding: 12 25;
+                                           -fx-background-radius: 8;"/>
+
+                        </VBox>
+                    </Tab>
+                </tabs>
+            </TabPane>
 
             <Label fx:id="mensaje"
-                   style="-fx-text-fill: #E63946; -fx-font-size: 16px;"/>
+                   style="-fx-text-fill: #E63946; -fx-font-size: 14px; -fx-font-weight: bold;"/>
 
         </VBox>
     </center>

@@ -1,54 +1,71 @@
 package co.uniquindio.edu.poo.model;
 
-/**
- * Representa un reporte visual de tipo diagrama de pastel.
- * Permite mostrar información distribuida en diferentes categorías.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class DiagramaPastel extends ReporteVisual {
 
     private String datos;
+    private List<String> categorias;
+    private List<Double> porcentajes;
 
+    /**
+     * Construye un reporte visual de diagrama de pastel.
+     *
+     * @param anchoVentana  ancho del gráfico.
+     * @param altoVentana   alto del gráfico.
+     * @param tituloGrafico título del gráfico.
+     */
     public DiagramaPastel(int anchoVentana, int altoVentana, String tituloGrafico) {
         super(anchoVentana, altoVentana, tituloGrafico);
+        this.categorias = new ArrayList<>();
+        this.porcentajes = new ArrayList<>();
+    }
+
+    public List<String> getCategorias() {
+        return categorias;
+    }
+
+    public List<Double> getPorcentajes() {
+        return porcentajes;
     }
 
     /**
-     * Genera el reporte ejecutando el procesamiento de los datos
-     * y posteriormente mostrando su representación visual.
-     */
-    @Override
-    public void generarReporte() {
-
-        procesarDatos();
-        renderizarVista();
-    }
-    /**
-     * Prepara la información que será utilizada en el diagrama.
+     * Calcula el porcentaje de ocupación de cada función programada en el cine.
      */
     @Override
     public void procesarDatos() {
-        datos = obtenerDatos();
+        categorias.clear();
+        porcentajes.clear();
+        Cinema cinema = Cinema.getInstancia();
+        StringBuilder sb = new StringBuilder();
+        for (Funcion funcion : cinema.getListaFunciones()) {
+            double ocupacion = funcion.calcularPorcentajeOcupacion();
+            String etiqueta = funcion.getIdFuncion() + " - " + funcion.getPelicula().getTitulo();
+            categorias.add(etiqueta);
+            porcentajes.add(ocupacion);
+            sb.append(etiqueta).append(": ").append(String.format("%.1f", ocupacion)).append("%\n");
+        }
+        datos = sb.toString();
     }
 
     /**
-     * Obtiene la información que se representará en el gráfico.
+     * Devuelve los porcentajes calculados para el diagrama de pastel.
      *
-     * @return datos destinados al diagrama de pastel.
+     * @return texto con las proporciones por categoría.
      */
     @Override
     public String obtenerDatos() {
-
-        return "Datos para el diagrama de pastel";
+        return datos;
     }
+
     /**
-     * Representa el diagrama mostrando su título, tipo de gráfico,
-     * información y dimensiones configuradas.
+     * Prepara la vista del diagrama de pastel con los porcentajes calculados.
      */
     @Override
     public void renderizarVista() {
-        System.out.println("=== " + tituloGrafico + " ===");
-        System.out.println("Tipo: Diagrama de pastel");
-        System.out.println(datos);
-        System.out.println("Dimensiones: " + anchoVentana + "x" + altoVentana);
+        if (datos == null) {
+            procesarDatos();
+        }
     }
 }

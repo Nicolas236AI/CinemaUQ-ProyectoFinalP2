@@ -1,5 +1,7 @@
 package co.uniquindio.edu.poo.model;
+
 import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StrategyDescuentoTest {
@@ -18,7 +20,7 @@ public class StrategyDescuentoTest {
     }
 
     /**
-     * Prueba que el cálculo del descuento por fidelidad se aplique correctamente basándose en los puntos y porcentaje requeridos.
+     * Prueba que el cálculo del descuento por fidelidad se aplique correctamente basándose en el porcentaje configurado.
      */
     @Test
     public void testCalcularDescuentoFidelidad() {
@@ -40,8 +42,26 @@ public class StrategyDescuentoTest {
 
         assertEquals(5000.0, contexto.aplicarEstrategia(50000.0), 0.01);
 
-        // Cambiamos a la estrategia de fidelidad dinámicamente
         contexto.setEstrategia(new DescuentoFidelidad(150, 25.0));
         assertEquals(12500.0, contexto.aplicarEstrategia(50000.0), 0.01);
+    }
+
+    /**
+     * Prueba la acumulación, vigencia a un año y redención FIFO en CuentaPuntos.
+     */
+    @Test
+    public void testVigenciaYRedencionCuentaPuntos() {
+        Cliente cliente = new Cliente("C-99", "Sofía", "sofia@mail.com", Cinema.getInstancia());
+        CuentaPuntos cuenta = cliente.getCuentaPuntos();
+
+        // Lote vencido (hace más de 1 año)
+        cuenta.acumularPuntosConFecha(400, LocalDate.now().minusYears(1).minusDays(5));
+        assertEquals(0, cuenta.getSaldoPuntos());
+
+        // Lote vigente
+        cuenta.acumularPuntosConFecha(300, LocalDate.now().minusMonths(2));
+        assertEquals(300, cuenta.getSaldoPuntos());
+        assertTrue(cuenta.redimirPuntos(250));
+        assertEquals(50, cuenta.getSaldoPuntos());
     }
 }

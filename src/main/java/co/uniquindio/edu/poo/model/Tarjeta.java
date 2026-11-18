@@ -1,9 +1,11 @@
 package co.uniquindio.edu.poo.model;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tarjeta {
+
     private String idTarjeta;
     private double saldo;
     private boolean estaActiva;
@@ -12,12 +14,13 @@ public class Tarjeta {
     private HistorialMovimientos historialMovimientos;
 
     /**
-     * metodo constructor de la clase Tarjeta para inicializar sus valores
-     * @param idTarjeta identificador de la tarjeta
-     * @param saldo saldo inicial
-     * @param estaActiva estado de activacion
-     * @param cliente cliente propietario
-     * @param historialMovimientos historial de movimientos asociado
+     * Inicializa una tarjeta virtual asociada a un cliente y vincula su historial de movimientos.
+     *
+     * @param idTarjeta            identificador único de la tarjeta.
+     * @param saldo                saldo inicial disponible.
+     * @param estaActiva           estado de activación de la tarjeta.
+     * @param cliente              cliente propietario.
+     * @param historialMovimientos historial de movimientos asociado.
      */
     public Tarjeta(String idTarjeta, double saldo, boolean estaActiva, Cliente cliente, HistorialMovimientos historialMovimientos) {
         this.idTarjeta = idTarjeta;
@@ -25,7 +28,9 @@ public class Tarjeta {
         this.estaActiva = estaActiva;
         this.cliente = cliente;
         this.listaRecargas = new ArrayList<>();
-        this.historialMovimientos = historialMovimientos;
+        this.historialMovimientos = (historialMovimientos != null)
+                ? historialMovimientos
+                : new HistorialMovimientos("HIST-" + idTarjeta, this);
     }
 
     public String getIdTarjeta() {
@@ -77,26 +82,65 @@ public class Tarjeta {
     }
 
     /**
-     * metodo que sirve para debitar saldo de la tarjeta
-     * @param monto cantidad a debitar
-     * @return verdadero si la transaccion fue exitosa
+     * Verifica que la tarjeta esté activa y cuente con saldo suficiente para cubrir un monto.
+     *
+     * @param monto valor que se pretende debitar.
+     */
+    public void validarDisponibilidadPago(double monto) {
+        if (!estaActiva) {
+            throw new IllegalStateException("La tarjeta virtual " + idTarjeta + " está inactiva.");
+        }
+        if (monto < 0) {
+            throw new IllegalArgumentException("El monto a debitar no puede ser negativo.");
+        }
+        if (saldo < monto) {
+            throw new IllegalStateException("Saldo insuficiente en la tarjeta. Disponible: $" + saldo + ", Requerido: $" + monto);
+        }
+    }
+
+    /**
+     * Descuenta un monto del saldo si la tarjeta está activa y posee fondos suficientes, registrando el movimiento.
+     *
+     * @param monto cantidad a debitar.
+     * @return true si el débito se efectuó correctamente.
      */
     public boolean debitarSaldo(double monto) {
-        if (estaActiva && saldo >= monto) {
+        if (estaActiva && monto >= 0 && saldo >= monto) {
             saldo -= monto;
+            historialMovimientos.registrarMovimiento("COMPRA | -$" + monto + " | " + LocalDateTime.now());
             return true;
         }
         return false;
     }
 
     /**
-     * metodo que sirve para acreditar saldo a la tarjeta
-     * @param monto cantidad a acreditar
+     * Incrementa el saldo de la tarjeta cuando se aprueba una recarga y registra el movimiento.
+     *
+     * @param monto valor a acreditar.
      */
     public void acreditarSaldo(double monto) {
-        if (estaActiva && monto > 0) {
-            saldo += monto;
+        if (!estaActiva) {
+            throw new IllegalStateException("No se puede recargar una tarjeta inactiva.");
         }
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto de recarga debe ser mayor a cero.");
+        }
+        saldo += monto;
+        historialMovimientos.registrarMovimiento("RECARGA | +$" + monto + " | " + LocalDateTime.now());
+    }
+
+    /**
+     * Devuelve dinero a la tarjeta producto de la cancelación de una compra y registra el reembolso.
+     *
+     * @param monto    valor a reembolsar.
+     * @param idCompra identificador de la compra reembolsada.
+     */
+    public void acreditarReembolso(double monto, String idCompra) {
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto de reembolso debe ser mayor a cero.");
+        }
+        saldo += monto;
+        historialMovimientos.registrarMovimiento("REEMBOLSO (" + idCompra + ") | +$" + monto + " | " + LocalDateTime.now());
     }
 
     @Override
